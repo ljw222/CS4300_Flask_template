@@ -355,10 +355,12 @@
     </div>
     <div class="result_div">
       <h1 id="output_message">{{output_message}}</h1>
+      {% if legend_bool %}
       <div id="dollar_legend">
         <p id="legend_label">Price per Person in Dollars:</p>
         <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
       </div>
+      {% endif %}
       {% for d in data %}
       <div class="rec_info">
         <div class="summary">

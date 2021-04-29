@@ -68,7 +68,10 @@ def query():
       # rel_restaurants = filterRestaurants(price_query, cuisine_query)
       # cosine_sim_restaurants = getCosineRestaurants(review_query, rel_restaurants)
       #output_message = "Your search " + restaurant_query + " is not in the dataset. Please try another restaurant"
-  return render_template('search.html', output_message=output_message, data=data, restaurant_list=restaurant_list)
+  legend_bool = True
+  if len(data) == 0:
+    legend_bool = False
+  return render_template('search.html', output_message=output_message, data=data, restaurant_list=restaurant_list, legend_bool = legend_bool)
 
 if __name__ == "__main__":
   print("Flask app running at http://0.0.0.0:5000")

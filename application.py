@@ -42,10 +42,6 @@ def query():
   if restaurant_query:
     restaurant_query = restaurant_query
 
-    print(restaurant_to_index.keys())
-    print("restaurant_query")
-    print(restaurant_query)
-
     # if restaurant_query is in the data
     if restaurant_query in restaurant_to_index.keys():
       top_tuple = get_top(restaurant_query, price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, False, None)

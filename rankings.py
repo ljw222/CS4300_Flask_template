@@ -144,14 +144,14 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
 
   recs = []
 
-  print(type(user_review))
-  print(user_review)
+  # print(type(user_review))
+  # print(user_review)
   if not user_review:
-    print("not user_review")
-    print(restaurant)
-    print(cos_sim_matrix)
+    # print("not user_review")
+    # print(restaurant)
+    # print(cos_sim_matrix)
     ranked = get_ranked_restaurants(restaurant, cos_sim_matrix, False)
-    print(ranked)
+    # print(ranked)
   #rankings for user review
   else:
     ranked = get_ranked_restaurants("", user_matrix, True)
@@ -166,8 +166,8 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     ranked_names.append(rest[0])
     ranked_cossims.append(rest[1])
     restaurant_ambiances.append(data["BOSTON"][rest[0]]["ambience"])
-  print("ranked_cossims")
-  print(ranked_cossims)
+  # print("ranked_cossims")
+  # print(ranked_cossims)
   if not user_review:
     user_and_rest_ambiances = list(set(ambiance + (data["BOSTON"][restaurant]["ambience"])))
   else:
@@ -295,15 +295,6 @@ def web_scraping(restaurants, sim_scores, input_index):
     full_info[r] = info
     info['reviews'] = get_reviews(r)
     info['id'] = bus_id
-    # get sim score of resturaunt by averaging sim scores of reviews
     info['sim_score'] = sim_score
-    # orig_reviews = review_idx_for_restaurant[r] # list of review ids
-    # new_reviews = review_idx_for_restaurant[index_to_restaurant[input_index]]
-    #   for j in new_reviews:
-    #     info['sim_score'] += cos_sim_matrix[i][j]
-    # info['sim_score'] = info['sim_score'] / 4
-    # info['sim_score'] = 0
-    #if not user_review:
-      #orig_reviews = review_idx_for_restaurant[r] # list of review ids
-  #main()
+    info['price'] = int(small_data[r]['price'])
   return full_info

@@ -134,7 +134,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   }
   Returns: list
   """
-  print(ambiance_weight, review_weight)
+  # print(ambiance_weight, review_weight)
   price_preference = True
   cuisine_preference = True
   ambiance_preference = True
@@ -144,10 +144,15 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     cuisine_preference = False
 
   recs = []
-  print(type(ambiance))
-  print(ambiance)
+
+  # print(type(user_review))
+  # print(user_review)
   if not user_review:
+    # print("not user_review")
+    # print(restaurant)
+    # print(cos_sim_matrix)
     ranked = get_ranked_restaurants(restaurant, cos_sim_matrix, False)
+    # print(ranked)
   #rankings for user review
   else:
     ranked = get_ranked_restaurants("", user_matrix, True)
@@ -162,7 +167,8 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     ranked_names.append(rest[0])
     ranked_cossims.append(rest[1])
     restaurant_ambiances.append(data["BOSTON"][rest[0]]["ambience"])
-
+  # print("ranked_cossims")
+  # print(ranked_cossims)
   if not user_review:
     user_and_rest_ambiances = list(set(ambiance + (data["BOSTON"][restaurant]["ambience"])))
   else:
@@ -173,19 +179,19 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     print("Predicted ambiances: ", predicted_ambiances)
     user_and_rest_ambiances = list(set(ambiance + predicted_ambiances))
 
-  print(user_and_rest_ambiances)
+  # print("user_and_rest_ambiances")
+  # print(user_and_rest_ambiances)
   jaccard_list = []
   if len(user_and_rest_ambiances) != 0:
     jaccard_list = getJaccard(user_and_rest_ambiances, restaurant_ambiances)
 
-  print(len(jaccard_list))
+  # print(len(jaccard_list))
   weighted_rankings = []
   weighted_name_ranks = []
 
   if len(user_and_rest_ambiances) == 0:
     ambiance_preference = False
     weighted_cossim = [el for el in ranked_cossims]
-    print(weighted_cossim)
     weighted_rankings = [x for x in weighted_cossim]
     for i in range(len(ranked_names)):
       weighted_name_ranks.append((ranked_names[i], weighted_rankings[i]))
@@ -193,11 +199,11 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   else:
     weighted_cossim = [el * review_weight for el in ranked_cossims]
     weighted_jaccard = [el * ambiance_weight for el in jaccard_list]
-    print("Start new")
-    print(len(weighted_cossim))
-    print(len(weighted_jaccard))
+    # print("Start new")
+    # print(len(weighted_cossim))
+    # print(len(weighted_jaccard))
     weighted_rankings = [x + y for x, y in zip(weighted_cossim, weighted_jaccard)]
-    print("before for")
+    # print("before for")
     for i in range(len(ranked_names)):
       weighted_name_ranks.append((ranked_names[i], weighted_rankings[i]))
   weighted_name_ranks = sorted(weighted_name_ranks, key=lambda x: -x[1])
@@ -205,8 +211,8 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   #print(weighted_name_ranks)
   # print(weighted_name_ranks[0:10])
 
-  print(price_preference)
-  print(cuisine_preference)
+  # print(price_preference)
+  # print(cuisine_preference)
   for restaurant_info in weighted_name_ranks: # restaurant_info = (name, weighted sim score)
     if len(recs) == n: # if have enough top places, stop finding more
       break
@@ -217,7 +223,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     # no filtering
     if (not price_preference) and (not cuisine_preference) and (not ambiance_preference):
       recs.append((name, ranking))
-      print(recs)
+      # print(recs)
     else:
       cuisines = data["BOSTON"][name]["categories"] # array of tagged cuisines
 
@@ -295,15 +301,6 @@ def web_scraping(restaurants, sim_scores, input_index):
     full_info[r] = info
     info['reviews'] = get_reviews(r)
     info['id'] = bus_id
-    # get sim score of resturaunt by averaging sim scores of reviews
     info['sim_score'] = sim_score
-    # orig_reviews = review_idx_for_restaurant[r] # list of review ids
-    # new_reviews = review_idx_for_restaurant[index_to_restaurant[input_index]]
-    #   for j in new_reviews:
-    #     info['sim_score'] += cos_sim_matrix[i][j]
-    # info['sim_score'] = info['sim_score'] / 4
-    # info['sim_score'] = 0
-    #if not user_review:
-      #orig_reviews = review_idx_for_restaurant[r] # list of review ids
-  #main()
+    info['price'] = int(small_data[r]['price'])
   return full_info

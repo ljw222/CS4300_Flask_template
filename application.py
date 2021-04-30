@@ -40,7 +40,8 @@ def query():
 
   # if there is an input
   if restaurant_query:
-    restaurant_query = string.capwords(restaurant_query)
+    restaurant_query = restaurant_query
+
     # if restaurant_query is in the data
     if restaurant_query in restaurant_to_index.keys():
       top_tuple = get_top(restaurant_query, price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, False, None)
@@ -56,13 +57,10 @@ def query():
       #output_message = "Your search " + restaurant_query + " is not in the dataset. Please enter its information"
       review_query = request.args.get('user_review')
       rel_restaurants = filterRestaurants(price_query, cuisine_query)
-      # print("here")
-      # print(len(rel_restaurants))
       cosine_sim_restaurants = computeCosine(review_query, rel_restaurants)
       top_tuple = get_top("", price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, True, cosine_sim_restaurants, review_query)
       # print(top_tuple)
       top_restaurants = [x[0] for x in top_tuple]
-      # print(top_restaurants)
       top_sim_scores = [x[1] for x in top_tuple]
       app.logger.critical("got restaurants")
       output_message = "Your search: " + restaurant_query
@@ -71,7 +69,10 @@ def query():
       # rel_restaurants = filterRestaurants(price_query, cuisine_query)
       # cosine_sim_restaurants = getCosineRestaurants(review_query, rel_restaurants)
       #output_message = "Your search " + restaurant_query + " is not in the dataset. Please try another restaurant"
-  return render_template('search.html', output_message=output_message, data=data, restaurant_list=restaurant_list)
+  legend_bool = True
+  if len(data) == 0:
+    legend_bool = False
+  return render_template('search.html', output_message=output_message, data=data, restaurant_list=restaurant_list, legend_bool = legend_bool)
 
 if __name__ == "__main__":
   print("Flask app running at http://0.0.0.0:5000")

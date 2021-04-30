@@ -59,7 +59,7 @@ def query():
       # print("here")
       # print(len(rel_restaurants))
       cosine_sim_restaurants = computeCosine(review_query, rel_restaurants)
-      top_tuple = get_top("", price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, True, cosine_sim_restaurants)
+      top_tuple = get_top("", price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, True, cosine_sim_restaurants, review_query)
       # print(top_tuple)
       top_restaurants = [x[0] for x in top_tuple]
       # print(top_restaurants)

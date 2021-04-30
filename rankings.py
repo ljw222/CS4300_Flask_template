@@ -16,6 +16,7 @@ import requests
 import lxml
 import cchardet
 import pickle
+from machine_learning import predict
 
 #code from class demo
 word_splitter = re.compile(r"""
@@ -117,7 +118,7 @@ def getJaccard(input_ambiances, all_rests_ambiances):
     jaccard_ambiances.append(intersection/union)
   return jaccard_ambiances
 
-def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance_weight, user_review, user_matrix):
+def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance_weight, user_review, user_matrix, review_text=None):
   """Returns a list of the top n restuarants that match the inputted restaurant
   and preferences indicated
   Params: {
@@ -165,7 +166,12 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   if not user_review:
     user_and_rest_ambiances = list(set(ambiance + (data["BOSTON"][restaurant]["ambience"])))
   else:
-    user_and_rest_ambiances = ambiance
+    predicted_ambiances = []
+    for label in ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']:
+      if predict(review_text, label):
+        predicted_ambiances.append(label)
+    print("Predicted ambiances: ", predicted_ambiances)
+    user_and_rest_ambiances = list(set(ambiance + predicted_ambiances))
 
   print(user_and_rest_ambiances)
   jaccard_list = []

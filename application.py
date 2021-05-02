@@ -19,6 +19,9 @@ def query():
   cuisine_query = request.args.get('cuisine')
   user_review = request.args.get('user_review')
 
+  print("query")
+  print(restaurant_query)
+
   # get ambiances
   ambiances_query = []
   ambiance_inputs = ['ambiance1', 'ambiance2', 'ambiance3', 'ambiance4', 'ambiance5', 'ambiance6', 'ambiance7', 'ambiance8']

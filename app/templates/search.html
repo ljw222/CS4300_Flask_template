@@ -199,12 +199,15 @@
     <script type="text/javascript">
         // need to get all names of restaurants from dict in rankings.py
         var restaurants_string = "{{ restaurant_list }}";
-        var restaurants_string_cleaned = restaurants_string.replaceAll("&#39;", "");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#34;", "");
+        var restaurants_string_cleaned = restaurants_string.replaceAll("&#34;", "");
         var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("amp;", "");
+        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(" &#39;", " ");
+        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;,", ", ");
+        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("[&#39;", "[");
+        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;]", "]");
+        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;", "'");
         var restaurants_string_cleaned = restaurants_string_cleaned.substring(1, restaurants_string_cleaned.length - 1)
         var restaurants = restaurants_string_cleaned.split(", ");
-
         $(function () {
             $("#fav_name").autocomplete({
                 source: restaurants,

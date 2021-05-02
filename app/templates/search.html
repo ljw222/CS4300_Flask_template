@@ -183,6 +183,21 @@
         color: #4a5899;
         padding-right: 5px;
     }
+
+    #filter_info {
+        margin-left: 30px;
+    }
+
+    #search_pref {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-size: 20px;
+    }
+
+    ul {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
   </style>
 
   <head>
@@ -208,6 +223,10 @@
         var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;", "'");
         var restaurants_string_cleaned = restaurants_string_cleaned.substring(1, restaurants_string_cleaned.length - 1)
         var restaurants = restaurants_string_cleaned.split(", ");
+        restaurants = restaurants.map(function (r) {
+            return r.trim();
+        });
+
         $(function () {
             $("#fav_name").autocomplete({
                 source: restaurants,
@@ -243,7 +262,7 @@
             <textarea name="user_review" id="user_review"></textarea>
           </div>
           <div class="form_group">
-            <label for="max_price">Price point:</label>
+            <label for="max_price">Price Point:</label>
             <select name="max_price" id="max_price">
               <option value=""></option>
               <option value="low">Low</option>
@@ -357,60 +376,69 @@
       </form>
     </div>
     <div class="result_div">
-      <h1 id="output_message">{{output_message}}</h1>
-      {% if legend_bool %}
-      <div id="dollar_legend">
-        <p id="legend_label">Price per Person in Dollars:</p>
-        <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
-      </div>
-      {% endif %}
-      {% for d in data %}
-      <div class="rec_info">
-        <div class="summary">
-          <div class="name_div">
-            <a
-              class="restaurant_name"
-              href="https://www.yelp.com/biz/{{data[d]['id']}}"
-              >{{d}}</a
-            >
-            <p>({{data[d]['sim_score']}}% Match)</p>
-          </div>
-          <div class="categories">
-            <p class="categories_label">Categories:</p>
-            <p>{{data[d]['categories']}}</p>
-          </div>
-          <p>{{data[d]['address']}}</p>
-
-          <div class="icon_info">
-            <div class="stars">
-                {% for star in range(data[d]['star rating']) %}
-                <p>★</p>
-                {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
-                <p>☆</p>
+        <h1 id="output_message">{{output_message}}</h1>
+        {% if legend_bool %}
+        <div id="filter_info">
+            <p id="search_pref">Search Preferences:</p>
+            <ul>
+                {% for filter in filter_message %}
+                <li>{{filter}}: {{filter_message[filter]}}</li>
                 {% endfor %}
-            </div>
-            <div>
-                <p class="divider"> | </p>
-            </div>
-            <div class="dollar_signs">
-                {% for dollar in range(data[d]['price']) %}
-                <p>$</p>
-                {% endfor %}
-            </div>
+            </ul>
         </div>
 
+        <div id="dollar_legend">
+            <p id="legend_label">Price per Person in Dollars:</p>
+            <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
         </div>
-        <div class="review_pic">
-          <img src="{{data[d].photos[0]}}" width="250px" />
-          <div class="review_info">
-            <p class="review_label">Reviews:</p>
-            {% for r in data[d]['reviews'] %}
-            <p>"{{r}}"</p>
-            {% endfor %}
-          </div>
+        {% endif %}
+        {% for d in data %}
+        <div class="rec_info">
+            <div class="summary">
+            <div class="name_div">
+                <a
+                class="restaurant_name"
+                href="https://www.yelp.com/biz/{{data[d]['id']}}"
+                >{{d}}</a
+                >
+                <p>({{data[d]['sim_score']}}% Match)</p>
+            </div>
+            <div class="categories">
+                <p class="categories_label">Categories:</p>
+                <p>{{data[d]['categories']}}</p>
+            </div>
+            <p>{{data[d]['address']}}</p>
+
+            <div class="icon_info">
+                <div class="stars">
+                    {% for star in range(data[d]['star rating']) %}
+                    <p>★</p>
+                    {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
+                    <p>☆</p>
+                    {% endfor %}
+                </div>
+                <div>
+                    <p class="divider"> | </p>
+                </div>
+                <div class="dollar_signs">
+                    {% for dollar in range(data[d]['price']) %}
+                    <p>$</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            </div>
+            <div class="review_pic">
+            <img src="{{data[d].photos[0]}}" width="250px" />
+            <div class="review_info">
+                <p class="review_label">Reviews:</p>
+                {% for r in data[d]['reviews'] %}
+                <p>"{{r}}"</p>
+                {% endfor %}
+            </div>
+            </div>
         </div>
-      </div>
-      {% endfor %}
+        {% endfor %}
     </div>
 
     <footer>

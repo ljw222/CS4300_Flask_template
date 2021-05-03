@@ -79,13 +79,9 @@ def query():
       rel_restaurants = filterRestaurants(price_query, cuisine_query)
       cosine_sim_restaurants = computeCosine(review_query, rel_restaurants)
       top_tuple = get_top("", price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, True, cosine_sim_restaurants, review_query)
-      # print(top_tuple)
       top_restaurants = [x[0] for x in top_tuple]
       top_sim_scores = [x[1] for x in top_tuple]
       app.logger.critical("got restaurants")
-      print(output_message)
-      print(top_restaurants)
-      print(top_sim_scores)
       data = web_scraping(top_restaurants, top_sim_scores, 0)
   legend_bool = True
   if len(data) == 0:

@@ -145,14 +145,8 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
 
   recs = []
 
-  # print(type(user_review))
-  # print(user_review)
   if not user_review:
-    # print("not user_review")
-    # print(restaurant)
-    # print(cos_sim_matrix)
     ranked = get_ranked_restaurants(restaurant, cos_sim_matrix, False)
-    # print(ranked)
   #rankings for user review
   else:
     ranked = get_ranked_restaurants("", user_matrix, True)
@@ -167,8 +161,6 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     ranked_names.append(rest[0])
     ranked_cossims.append(rest[1])
     restaurant_ambiances.append(data["BOSTON"][rest[0]]["ambience"])
-  # print("ranked_cossims")
-  # print(ranked_cossims)
   if not user_review:
     user_and_rest_ambiances = list(set(ambiance + (data["BOSTON"][restaurant]["ambience"])))
   else:
@@ -176,16 +168,12 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     for label in ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']:
       if predict(review_text, label):
         predicted_ambiances.append(label)
-    print("Predicted ambiances: ", predicted_ambiances)
     user_and_rest_ambiances = list(set(ambiance + predicted_ambiances))
 
-  # print("user_and_rest_ambiances")
-  # print(user_and_rest_ambiances)
   jaccard_list = []
   if len(user_and_rest_ambiances) != 0:
     jaccard_list = getJaccard(user_and_rest_ambiances, restaurant_ambiances)
 
-  # print(len(jaccard_list))
   weighted_rankings = []
   weighted_name_ranks = []
 
@@ -199,20 +187,11 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   else:
     weighted_cossim = [el * review_weight for el in ranked_cossims]
     weighted_jaccard = [el * ambiance_weight for el in jaccard_list]
-    # print("Start new")
-    # print(len(weighted_cossim))
-    # print(len(weighted_jaccard))
     weighted_rankings = [x + y for x, y in zip(weighted_cossim, weighted_jaccard)]
-    # print("before for")
     for i in range(len(ranked_names)):
       weighted_name_ranks.append((ranked_names[i], weighted_rankings[i]))
   weighted_name_ranks = sorted(weighted_name_ranks, key=lambda x: -x[1])
-  #print(weighted_name_ranks)
-  #print(weighted_name_ranks)
-  # print(weighted_name_ranks[0:10])
 
-  # print(price_preference)
-  # print(cuisine_preference)
   for restaurant_info in weighted_name_ranks: # restaurant_info = (name, weighted sim score)
     if len(recs) == n: # if have enough top places, stop finding more
       break
@@ -223,7 +202,6 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     # no filtering
     if (not price_preference) and (not cuisine_preference) and (not ambiance_preference):
       recs.append((name, ranking))
-      # print(recs)
     else:
       cuisines = data["BOSTON"][name]["categories"] # array of tagged cuisines
 
@@ -260,47 +238,51 @@ def get_reviews(restaurant):
   return reviews
 
 def web_scraping(restaurants, sim_scores, input_index):
-  full_info = dict()
-  requests_session = requests.Session()
-  for i in range(len(restaurants)):
-    r = restaurants[i]
-    sim_score = round(sim_scores[i] * 100, 2)
-    info = dict()
-    bus_id = small_data[r]['id']
-    page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
-    print("request made")
-    soup = BeautifulSoup(page.content, 'lxml')
-    photos = soup.findAll('img', {"class": "photo-header-media-image__373c0__2Qf5H"})
-    image_srcs = []
-    for i, p in enumerate(photos):
-      src = p.attrs['src']
-      image_srcs.append(src)
-    info['photos'] = image_srcs
-    # search the title of the webpage for address
-    possible_addresses = soup.findAll('title', {"data-rh": "true"})
-    if len(possible_addresses) == 0:
-      info['address'] = "No address found"
-    else:
-      address = "No address found"
-      for p in possible_addresses:
-        if p.get_text() != "":
-          address = p.get_text()
-          for piece in address.split('- '):
-            if "Boston" in piece:
-              address = piece
-      info['address'] = address
-    rating_text = soup.findAll('div', {"class": re.compile("i-stars--large")})[0].attrs['aria-label']
-    number = round(float(rating_text.split(' ')[0]))
-    info['star rating'] = number
-    # get rid of word 'Restaurants' in categories list
-    categories_string = small_data[r]['categories']
-    categories_list = categories_string.split(', ')
-    categories_list = [word for word in categories_list if word not in ['Restaurants']]
-    info['categories'] = ', '.join(map(str, categories_list))
+  try:
+    full_info = dict()
+    requests_session = requests.Session()
+    for i in range(len(restaurants)):
+      r = restaurants[i]
+      sim_score = round(sim_scores[i] * 100, 2)
+      info = dict()
+      bus_id = small_data[r]['id']
+      page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
+      print("request made")
+      soup = BeautifulSoup(page.content, 'lxml')
+      photos = soup.findAll('img', {"class": "photo-header-media-image__373c0__2Qf5H"})
+      image_srcs = []
+      for i, p in enumerate(photos):
+        src = p.attrs['src']
+        image_srcs.append(src)
+      info['photos'] = image_srcs
+      # search the title of the webpage for address
+      possible_addresses = soup.findAll('title', {"data-rh": "true"})
+      if len(possible_addresses) == 0:
+        info['address'] = "No address found"
+      else:
+        address = "No address found"
+        for p in possible_addresses:
+          if p.get_text() != "":
+            address = p.get_text()
+            for piece in address.split('- '):
+              if "Boston" in piece:
+                address = piece
+        info['address'] = address
+      rating_text = soup.findAll('div', {"class": re.compile("i-stars--large")})[0].attrs['aria-label']
+      number = round(float(rating_text.split(' ')[0]))
+      info['star rating'] = number
+      # get rid of word 'Restaurants' in categories list
+      categories_string = small_data[r]['categories']
+      categories_list = categories_string.split(', ')
+      categories_list = [word for word in categories_list if word not in ['Restaurants']]
+      info['categories'] = ', '.join(map(str, categories_list))
 
-    full_info[r] = info
-    info['reviews'] = get_reviews(r)
-    info['id'] = bus_id
-    info['sim_score'] = sim_score
-    info['price'] = int(small_data[r]['price'])
-  return full_info
+      full_info[r] = info
+      info['reviews'] = get_reviews(r)
+      info['id'] = bus_id
+      info['sim_score'] = sim_score
+      info['price'] = int(small_data[r]['price'])
+    return full_info
+  except IndexError as error:
+    print("error")
+    return web_scraping(restaurants, sim_scores, input_index)

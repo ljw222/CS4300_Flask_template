@@ -56,12 +56,9 @@ def query():
   filter_message["Ambiance Weight"] = round(ambiance_weight, 2)
   filter_message["Review Weight"] = round(review_weight, 2)
 
-
-  print(filter_message)
   # if there is an input
-  if restaurant_query:
-    restaurant_query = restaurant_query
-
+  if restaurant_query or user_review:
+    # restaurant_query = restaurant_query
     # if restaurant_query is in the data
     if restaurant_query in restaurant_to_index.keys():
       top_tuple = get_top(restaurant_query, price_query, cuisine_query, ambiances_query, 5, review_weight, ambiance_weight, False, None)
@@ -74,7 +71,10 @@ def query():
 
     # restaurant_query is not in the data
     else:
-      output_message = "Your search: User Review"
+      if restaurant_query == "":
+        output_message = "Your Search: User Review"
+      else:
+        output_message = "Your Search: User Review for " + str(restaurant_query)
       review_query = request.args.get('user_review')
       rel_restaurants = filterRestaurants(price_query, cuisine_query)
       cosine_sim_restaurants = computeCosine(review_query, rel_restaurants)
@@ -83,7 +83,9 @@ def query():
       top_restaurants = [x[0] for x in top_tuple]
       top_sim_scores = [x[1] for x in top_tuple]
       app.logger.critical("got restaurants")
-      output_message = "Your search: " + restaurant_query
+      print(output_message)
+      print(top_restaurants)
+      print(top_sim_scores)
       data = web_scraping(top_restaurants, top_sim_scores, 0)
   legend_bool = True
   if len(data) == 0:

@@ -22,6 +22,11 @@
       padding-bottom: 50px;
     }
 
+    abbr {
+        text-decoration: none;
+        color:rgb(3, 152, 158);
+    }
+
     .form_group {
       display: flex;
       padding-bottom: 10px;
@@ -32,6 +37,19 @@
       text-align: right;
       padding-right: 10px;
     }
+
+    #review_instructions {
+        width: 300px;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    /* #review_instructions p {
+        font-style: italic;
+        margin-top: 2px;
+        padding-right: 10px;
+    } */
+
 
     #ambianceLabel {
       width: 300px;
@@ -65,6 +83,33 @@
 
     .fav_name_input {
       width: 250px;
+    }
+
+    input.invalid {
+        border-color: #c6878f;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* #fav_restaurant_div {
+        width: 300px;
+        text-align: right;
+        padding-right: 10px;
+    } */
+
+    #review_instructions_p {
+        font-style: italic;
+        margin-top: 2px;
+        padding-right: 10px;
+        color: #4a5899;
+    }
+
+    #fav_restaurant_p {
+        font-style: italic;
+        color: #4a5899;
+        margin-top: -7px;
     }
 
     /* output styling */
@@ -209,35 +254,11 @@
     />
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
-   <!-- Javascript -->
-    <script type="text/javascript">
-        // need to get all names of restaurants from dict in rankings.py
-        var restaurants_string = "{{ restaurant_list }}";
-        var restaurants_string_cleaned = restaurants_string.replaceAll("&#34;", "");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("amp;", "");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(" &#39;", " ");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;,", ", ");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("[&#39;", "[");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;]", "]");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;", "'");
-        var restaurants_string_cleaned = restaurants_string_cleaned.substring(1, restaurants_string_cleaned.length - 1)
-        var restaurants = restaurants_string_cleaned.split(", ");
-        restaurants = restaurants.map(function (r) {
-            return r.trim();
-        });
-
-        $(function () {
-            $("#fav_name").autocomplete({
-                source: restaurants,
-            });
-        });
-    </script>
   </head>
 
   <body>
     <img
-      src="{{url_for('static', filename='BostonEats.png')}}"
+      src="{{url_for('static', filename='BostonEats.png')}}"3
       alt="boston eats logo"
     />
     <div class="form_div">
@@ -245,20 +266,28 @@
         <div>
           <div class="form_group">
             <label class="form_label" for="fav_name"
-              >Name of favorite restaurant (required):</label
-            >
+            >Name of Favorite Boston Restaurant<abbr title="Required">*</abbr>:
+            </label>
+            <!-- <div id="fav_restaurant_div"> -->
+            <!-- </div> -->
             <input
-              type="text"
-              name="fav_name"
-              id="fav_name"
-              class="fav_name_input"
-              required
+                type="text"
+                name="fav_name"
+                id="fav_name"
+                class="fav_name_input"
+                onChange="nameValidation(this.value)"
+                required
             />
-          </div>
-          <div class="form_group">
-            <label class="form_label" for="user_review"
-              >User Review (need to show/hide):</label
-            >
+           </div>
+            <p class="hidden" id="fav_restaurant_p">This restaurant is not in the dataset. Try another restaurant and pick from the autocomplete suggestions, or input your own review!</p>
+          <!-- </div> -->
+          <div class="form_group hidden" id="user_review_div">
+            <div id="review_instructions">
+                <label class="form_label" for="user_review"
+                >User Review<abbr title="Required">*</abbr>:</label
+                >
+                <p id="review_instructions_p">2-3 sentences about why like the restaurant, the ambiance of the restaurant, your favorite foods there, etc.</p>
+            </div>
             <textarea name="user_review" id="user_review"></textarea>
           </div>
           <div class="form_group">
@@ -448,5 +477,51 @@
         mot23, Reetu Parikh: rsp99, Sahar Sami: ss2698
       </p>
     </footer>
+        <!-- Javascript -->
+        <script type="text/javascript">
+            // need to get all names of restaurants from dict in rankings.py
+            var restaurants_string = "{{ restaurant_list }}";
+            var restaurants_string_cleaned = restaurants_string.replaceAll("&#34;", "");
+            var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("amp;", "");
+            var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(" &#39;", " ");
+            var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;,", ", ");
+            var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("[&#39;", "[");
+            var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;]", "]");
+            var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;", "'");
+            var restaurants_string_cleaned = restaurants_string_cleaned.substring(1, restaurants_string_cleaned.length - 1)
+            var restaurants = restaurants_string_cleaned.split(", ");
+            restaurants = restaurants.map(function (r) {
+                return r.trim();
+            });
+
+            $(function () {
+                $("#fav_name").autocomplete({
+                    source: restaurants,
+                });
+            });
+
+            function nameValidation(name){
+                var name_input = document.getElementById("fav_name");
+                var user_review_div = document.getElementById("user_review_div");
+                var user_review_input = document.getElementById("user_review");
+                var fav_restaurant_p = document.getElementById("fav_restaurant_p");
+
+                // restaurant name is in dataset
+                if (restaurants.includes(name)) {
+                    name_input.classList.remove("invalid");
+                    user_review_div.classList.add("hidden");
+                    name_input.required = true;
+                    user_review_input.required = false;
+                    fav_restaurant_p.classList.add("hidden");
+                }
+                else { // not in dataset
+                    name_input.classList.add("invalid");
+                    user_review_div.classList.remove("hidden");
+                    name_input.required = false;
+                    user_review_input.required = true;
+                    fav_restaurant_p.classList.remove("hidden");
+                }
+            }
+        </script>
   </body>
 </html>

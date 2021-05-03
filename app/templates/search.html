@@ -299,17 +299,17 @@
             <label for="ambiance8">Casual</label><br />
           </div>
         </div>
-        <div class="form_group" id="slider_div">
+        <<<<<<< HEAD <div class="form_group" id="slider_div">
           <p>Ambiance Weight</p>
           <input type="range" min="0" max="100" value="50" class="slider" name="weightRange" id="weightRange" />
           <p>Review Weight</p>
-        </div>
-
-        <button type="submit">
-          Find your new favorite restaurant in Boston!
-        </button>
       </div>
-    </form>
+
+      <button type="submit">
+        Find your new favorite restaurant in Boston!
+      </button>
+  </div>
+  </form>
   </div>
   <div class="result_div">
     <h1 id="output_message">{{output_message}}</h1>
@@ -321,6 +321,68 @@
         <li>{{filter}}: {{filter_message[filter]}}</li>
         {% endfor %}
       </ul>
+      =======
+      </form>
+    </div>
+    <div class="result_div">
+      <h1 id="output_message">{{output_message}}</h1>
+      {% if legend_bool %}
+      <div id="filter_info">
+        <p id="search_pref">Search Preferences:</p>
+        <ul>
+          {% for filter in filter_message %}
+          <li>{{filter}}: {{filter_message[filter]}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div id="dollar_legend">
+        <p id="legend_label">Price per Person in Dollars:</p>
+        <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
+      </div>
+      {% endif %} {% for d in data %}
+      <div class="rec_info">
+        <div class="summary">
+          <div class="name_div">
+            <a class="restaurant_name" href="https://www.yelp.com/biz/{{data[d]['id']}}">{{d}}</a>
+            <p>({{data[d]['sim_score']}}% Match)</p>
+          </div>
+          <div class="categories">
+            <p class="categories_label">Categories:</p>
+            <p>{{data[d]['categories']}}</p>
+          </div>
+          <p>{{data[d]['address']}}</p>
+
+          <div class="icon_info">
+            <div class="stars">
+              {% for star in range(data[d]['star rating']) %}
+              <p>★</p>
+              {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
+              <p>☆</p>
+              {% endfor %}
+            </div>
+            <div>
+              <p class="divider">|</p>
+            </div>
+            <div class="dollar_signs">
+              {% for dollar in range(data[d]['price']) %}
+              <p>$</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="review_pic">
+          <img src="{{data[d].photos[0]}}" width="250px" />
+          <div class="review_info">
+            <p class="review_label">Reviews:</p>
+            {% for r in data[d]['reviews'] %}
+            <p>"{{r}}"</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      >>>>>>> 788500825e3c4677c388b499d301795de9e7f706
     </div>
 
     <div id="dollar_legend">

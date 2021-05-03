@@ -5,7 +5,7 @@
   }
 
   #header {
-      text-align: center;
+    text-align: center;
   }
 
   #header img {
@@ -76,7 +76,7 @@
   }
 
   #button_div {
-      text-align: center;
+    text-align: center;
   }
 
   textarea {
@@ -96,13 +96,13 @@
     display: none;
   }
 
-    li p {
-        display: inline-block;
-        padding-right: 4px;
-        font-weight: bold;
-        margin: 0;
-        color: #4a5899;
-    }
+  li p {
+    display: inline-block;
+    padding-right: 4px;
+    font-weight: bold;
+    margin: 0;
+    color: #4a5899;
+  }
 
   #review_instructions_p {
     font-style: italic;
@@ -267,9 +267,9 @@
 <body>
   <div class="form_div">
     <form method="get">
-        <div id="header">
-            <img src="{{url_for('static', filename='BostonEats.svg')}}" alt="boston eats logo" />
-        </div>
+      <div id="header">
+        <img src="{{url_for('static', filename='BostonEats.svg')}}" alt="boston eats logo" />
+      </div>
       <div>
         <div class="form_group">
           <label class="form_label" for="fav_name">Name of Favorite Boston Restaurant<abbr title="Required">*</abbr>:
@@ -350,9 +350,9 @@
           <p>Review Weight</p>
         </div>
         <div id="button_div">
-            <button type="submit">
+          <button type="submit">
             Find your new favorite restaurant in Boston!
-            </button>
+          </button>
         </div>
       </div>
     </form>
@@ -364,7 +364,9 @@
       <p id="search_pref">Search Preferences:</p>
       <ul>
         {% for filter in filter_message %}
-        <li><p>{{filter}}: </p>{{filter_message[filter]}}</li>
+        <li>
+          <p>{{filter}}: </p>{{filter_message[filter]}}
+        </li>
         {% endfor %}
       </ul>
     </div>
@@ -405,7 +407,8 @@
         </div>
       </div>
       <div class="review_pic">
-        <img src="{{data[d].photos[0]}}" width="250px" />
+        <img src="{{data[d].photos[0]}}" onerror="this.onerror=null;this.src='static/imagenotfound.png'"
+          width=" 250px" />
         <div class="review_info">
           <p class="review_label">Reviews:</p>
           {% for r in data[d]['reviews'] %}

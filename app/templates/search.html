@@ -4,6 +4,14 @@
     margin: 0;
   }
 
+  #header {
+      text-align: center;
+  }
+
+  #header img {
+    width: 50%;
+  }
+
   /* footer styling */
   footer {
     background-color: rgb(3, 152, 158);
@@ -33,32 +41,25 @@
   }
 
   label {
-    width: 300px;
+    width: 50%;
     text-align: right;
     padding-right: 10px;
   }
 
   #review_instructions {
-    width: 300px;
+    width: 50%;
     text-align: right;
     padding-right: 10px;
   }
 
-  /* #review_instructions p {
-        font-style: italic;
-        margin-top: 2px;
-        padding-right: 10px;
-    } */
-
-
   #ambianceLabel {
-    width: 300px;
+    width: 50%;
     text-align: right;
     padding-right: 10px;
   }
 
   #slider_div {
-    margin-left: 150px;
+    margin-left: 30%;
   }
 
   select {
@@ -72,17 +73,21 @@
     border-radius: 10px;
     border: none;
     font-weight: bold;
-    margin-left: 300px;
-    margin-top: 10px;
+    /* margin-left: 300px;
+    margin-top: 10px; */
+  }
+
+  #button_div {
+      text-align: center;
   }
 
   textarea {
-    width: 250px;
-    height: 100px;
+    width: 350px;
+    height: 200px;
   }
 
   .fav_name_input {
-    width: 250px;
+    width: 350px;
   }
 
   input.invalid {
@@ -93,11 +98,13 @@
     display: none;
   }
 
-  /* #fav_restaurant_div {
-        width: 300px;
-        text-align: right;
-        padding-right: 10px;
-    } */
+    li p {
+        display: inline-block;
+        padding-right: 4px;
+        font-weight: bold;
+        margin: 0;
+        color: #4a5899;
+    }
 
   #review_instructions_p {
     font-style: italic;
@@ -220,12 +227,13 @@
   #dollar_legend {
     display: flex;
     margin-left: 31px;
+    height: 35px;
   }
 
   #legend_label {
     font-style: normal !important;
     font-weight: 600;
-    color: #4a5899;
+    color: #c6878f;
     padding-right: 5px;
   }
 
@@ -237,6 +245,8 @@
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 20px;
+    color: #16425b;
+    font-weight: bold;
   }
 
   ul {
@@ -254,9 +264,11 @@
 </head>
 
 <body>
-  <img src="{{url_for('static', filename='BostonEats.png')}}" alt="boston eats logo" />
   <div class="form_div">
     <form method="get">
+        <div id="header">
+            <img src="{{url_for('static', filename='BostonEats.svg')}}" alt="boston eats logo" />
+        </div>
       <div>
         <div class="form_group">
           <label class="form_label" for="fav_name">Name of Favorite Boston Restaurant<abbr title="Required">*</abbr>:
@@ -336,10 +348,11 @@
           <input type="range" min="0" max="100" value="50" class="slider" name="weightRange" id="weightRange" />
           <p>Review Weight</p>
         </div>
-
-        <button type="submit">
-          Find your new favorite restaurant in Boston!
-        </button>
+        <div id="button_div">
+            <button type="submit">
+            Find your new favorite restaurant in Boston!
+            </button>
+        </div>
       </div>
     </form>
   </div>
@@ -350,7 +363,7 @@
       <p id="search_pref">Search Preferences:</p>
       <ul>
         {% for filter in filter_message %}
-        <li>{{filter}}: {{filter_message[filter]}}</li>
+        <li><p>{{filter}}: </p>{{filter_message[filter]}}</li>
         {% endfor %}
       </ul>
     </div>

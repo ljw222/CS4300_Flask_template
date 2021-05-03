@@ -48,7 +48,7 @@ def query():
   else:
     filter_message["Cuisine"] = cuisine_query
 
-  if price_query == None:
+  if price_query == "":
     filter_message["Price Point"] = "None"
   else:
     filter_message["Price Point"] = price_query.capitalize()

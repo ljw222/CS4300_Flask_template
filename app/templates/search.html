@@ -69,10 +69,10 @@
 
     /* output styling */
     h1 {
-        font-size: 26px;
-        margin-top: 30px;
-        margin-left: 30px;
-        margin-bottom: 0px;
+      font-size: 26px;
+      margin-top: 30px;
+      margin-left: 30px;
+      margin-bottom: 0px;
     }
 
     .rec_info {
@@ -156,53 +156,58 @@
     }
 
     .dollar_signs {
-        display: flex;
-        font-size: 18;
-        margin-top: 3px;
+      display: flex;
+      font-size: 18;
+      margin-top: 3px;
     }
 
     .icon_info {
-        display: flex;
+      display: flex;
     }
 
     .divider {
-        font-size: 18px;
-        margin-top: 4px !important;
-        margin-left: 5px !important;
-        margin-right: 5px !important;
+      font-size: 18px;
+      margin-top: 4px !important;
+      margin-left: 5px !important;
+      margin-right: 5px !important;
     }
 
     #dollar_legend {
-        display: flex;
-        margin-left: 31px;
+      display: flex;
+      margin-left: 31px;
     }
 
     #legend_label {
-        font-style: normal !important;
-        font-weight: 600;
-        color: #4a5899;
-        padding-right: 5px;
+      font-style: normal !important;
+      font-weight: 600;
+      color: #4a5899;
+      padding-right: 5px;
     }
 
     #filter_info {
-        margin-left: 30px;
+      margin-left: 30px;
     }
 
     #search_pref {
-        margin-top: 5px;
-        margin-bottom: 5px;
-        font-size: 20px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-size: 20px;
     }
 
     ul {
-        margin-top: 5px;
-        margin-bottom: 5px;
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
   </style>
 
   <head>
     <!-- <link rel="stylesheet" href="/static/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="/static/main.css" />
+    <!-- <link rel="stylesheet" href="/static/main.css" /> -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='main.css') }}"
+    />
     <link
       href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
       rel="stylesheet"
@@ -210,28 +215,52 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-   <!-- Javascript -->
+    <!-- Javascript -->
     <script type="text/javascript">
-        // need to get all names of restaurants from dict in rankings.py
-        var restaurants_string = "{{ restaurant_list }}";
-        var restaurants_string_cleaned = restaurants_string.replaceAll("&#34;", "");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("amp;", "");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(" &#39;", " ");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;,", ", ");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("[&#39;", "[");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;]", "]");
-        var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll("&#39;", "'");
-        var restaurants_string_cleaned = restaurants_string_cleaned.substring(1, restaurants_string_cleaned.length - 1)
-        var restaurants = restaurants_string_cleaned.split(", ");
-        restaurants = restaurants.map(function (r) {
-            return r.trim();
-        });
+      // need to get all names of restaurants from dict in rankings.py
+      var restaurants_string = "{{ restaurant_list }}";
+      var restaurants_string_cleaned = restaurants_string.replaceAll(
+        "&#34;",
+        ""
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(
+        "amp;",
+        ""
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(
+        " &#39;",
+        " "
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(
+        "&#39;,",
+        ", "
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(
+        "[&#39;",
+        "["
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(
+        "&#39;]",
+        "]"
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.replaceAll(
+        "&#39;",
+        "'"
+      );
+      var restaurants_string_cleaned = restaurants_string_cleaned.substring(
+        1,
+        restaurants_string_cleaned.length - 1
+      );
+      var restaurants = restaurants_string_cleaned.split(", ");
+      restaurants = restaurants.map(function (r) {
+        return r.trim();
+      });
 
-        $(function () {
-            $("#fav_name").autocomplete({
-                source: restaurants,
-            });
+      $(function () {
+        $("#fav_name").autocomplete({
+          source: restaurants,
         });
+      });
     </script>
   </head>
 
@@ -376,69 +405,67 @@
       </form>
     </div>
     <div class="result_div">
-        <h1 id="output_message">{{output_message}}</h1>
-        {% if legend_bool %}
-        <div id="filter_info">
-            <p id="search_pref">Search Preferences:</p>
-            <ul>
-                {% for filter in filter_message %}
-                <li>{{filter}}: {{filter_message[filter]}}</li>
-                {% endfor %}
-            </ul>
-        </div>
+      <h1 id="output_message">{{output_message}}</h1>
+      {% if legend_bool %}
+      <div id="filter_info">
+        <p id="search_pref">Search Preferences:</p>
+        <ul>
+          {% for filter in filter_message %}
+          <li>{{filter}}: {{filter_message[filter]}}</li>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <div id="dollar_legend">
-            <p id="legend_label">Price per Person in Dollars:</p>
-            <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
-        </div>
-        {% endif %}
-        {% for d in data %}
-        <div class="rec_info">
-            <div class="summary">
-            <div class="name_div">
-                <a
-                class="restaurant_name"
-                href="https://www.yelp.com/biz/{{data[d]['id']}}"
-                >{{d}}</a
-                >
-                <p>({{data[d]['sim_score']}}% Match)</p>
-            </div>
-            <div class="categories">
-                <p class="categories_label">Categories:</p>
-                <p>{{data[d]['categories']}}</p>
-            </div>
-            <p>{{data[d]['address']}}</p>
+      <div id="dollar_legend">
+        <p id="legend_label">Price per Person in Dollars:</p>
+        <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
+      </div>
+      {% endif %} {% for d in data %}
+      <div class="rec_info">
+        <div class="summary">
+          <div class="name_div">
+            <a
+              class="restaurant_name"
+              href="https://www.yelp.com/biz/{{data[d]['id']}}"
+              >{{d}}</a
+            >
+            <p>({{data[d]['sim_score']}}% Match)</p>
+          </div>
+          <div class="categories">
+            <p class="categories_label">Categories:</p>
+            <p>{{data[d]['categories']}}</p>
+          </div>
+          <p>{{data[d]['address']}}</p>
 
-            <div class="icon_info">
-                <div class="stars">
-                    {% for star in range(data[d]['star rating']) %}
-                    <p>★</p>
-                    {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
-                    <p>☆</p>
-                    {% endfor %}
-                </div>
-                <div>
-                    <p class="divider"> | </p>
-                </div>
-                <div class="dollar_signs">
-                    {% for dollar in range(data[d]['price']) %}
-                    <p>$</p>
-                    {% endfor %}
-                </div>
+          <div class="icon_info">
+            <div class="stars">
+              {% for star in range(data[d]['star rating']) %}
+              <p>★</p>
+              {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
+              <p>☆</p>
+              {% endfor %}
             </div>
-
+            <div>
+              <p class="divider">|</p>
             </div>
-            <div class="review_pic">
-            <img src="{{data[d].photos[0]}}" width="250px" />
-            <div class="review_info">
-                <p class="review_label">Reviews:</p>
-                {% for r in data[d]['reviews'] %}
-                <p>"{{r}}"</p>
-                {% endfor %}
+            <div class="dollar_signs">
+              {% for dollar in range(data[d]['price']) %}
+              <p>$</p>
+              {% endfor %}
             </div>
-            </div>
+          </div>
         </div>
-        {% endfor %}
+        <div class="review_pic">
+          <img src="{{data[d].photos[0]}}" width="250px" />
+          <div class="review_info">
+            <p class="review_label">Reviews:</p>
+            {% for r in data[d]['reviews'] %}
+            <p>"{{r}}"</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
 
     <footer>

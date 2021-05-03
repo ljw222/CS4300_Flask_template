@@ -319,155 +319,114 @@
                         <option value="fast_food">Fast Food</option>
                         <option value="bar">Bars</option>
                         <option value="steakhouse">Steakhouses</option> -->
-            </select>
-          </div>
-          <div class="form_group">
-            <p id="ambianceLabel">Ambiance:</p>
-            <div class="checkbox_div">
-              <input
-                type="checkbox"
-                id="ambiance1"
-                name="ambiance1"
-                value="romantic"
-              />
-              <label for="ambiance1">Romantic</label><br />
-              <input
-                type="checkbox"
-                id="ambiance2"
-                name="ambiance2"
-                value="intimate"
-              />
-              <label for="ambiance2">Intimate</label><br />
-              <input
-                type="checkbox"
-                id="ambiance3"
-                name="ambiance3"
-                value="classy"
-              />
-              <label for="ambiance3">Classy</label><br />
-              <input
-                type="checkbox"
-                id="ambiance4"
-                name="ambiance4"
-                value="hipster"
-              />
-              <label for="ambiance4">Hipster</label><br />
-            </div>
-            <div class="checkbox_div">
-              <input
-                type="checkbox"
-                id="ambiance5"
-                name="ambiance5"
-                value="touristy"
-              />
-              <label for="ambiance5">Touristy</label><br />
-              <input
-                type="checkbox"
-                id="ambiance6"
-                name="ambiance6"
-                value="trendy"
-              />
-              <label for="ambiance6">Trendy</label><br />
-              <input
-                type="checkbox"
-                id="ambiance7"
-                name="ambiance7"
-                value="upscale"
-              />
-              <label for="ambiance7">Upscale</label><br />
-              <input
-                type="checkbox"
-                id="ambiance8"
-                name="ambiance8"
-                value="casual"
-              />
-              <label for="ambiance8">Casual</label><br />
-            </div>
-          </div>
-          <div class="form_group" id="slider_div">
-            <p>Ambiance Weight</p>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value="50"
-              class="slider"
-              name="weightRange"
-              id="weightRange"
-            />
-            <p>Review Weight</p>
-          </div>
-
-          <button type="submit">
-            Find your new favorite restaurant in Boston!
-          </button>
+          </select>
         </div>
+        <div class="form_group">
+          <p id="ambianceLabel">Ambiance:</p>
+          <div class="checkbox_div">
+            <input type="checkbox" id="ambiance1" name="ambiance1" value="romantic" />
+            <label for="ambiance1">Romantic</label><br />
+            <input type="checkbox" id="ambiance2" name="ambiance2" value="intimate" />
+            <label for="ambiance2">Intimate</label><br />
+            <input type="checkbox" id="ambiance3" name="ambiance3" value="classy" />
+            <label for="ambiance3">Classy</label><br />
+            <input type="checkbox" id="ambiance4" name="ambiance4" value="hipster" />
+            <label for="ambiance4">Hipster</label><br />
+          </div>
+          <div class="checkbox_div">
+            <input type="checkbox" id="ambiance5" name="ambiance5" value="touristy" />
+            <label for="ambiance5">Touristy</label><br />
+            <input type="checkbox" id="ambiance6" name="ambiance6" value="trendy" />
+            <label for="ambiance6">Trendy</label><br />
+            <input type="checkbox" id="ambiance7" name="ambiance7" value="upscale" />
+            <label for="ambiance7">Upscale</label><br />
+            <input type="checkbox" id="ambiance8" name="ambiance8" value="casual" />
+            <label for="ambiance8">Casual</label><br />
+          </div>
+        </div>
+        <<<<<<< HEAD <div class="form_group" id="slider_div">
+          <p>Ambiance Weight</p>
+          <input type="range" min="0" max="100" value="50" class="slider" name="weightRange" id="weightRange" />
+          <p>Review Weight</p>
+      </div>
+
+      <button type="submit">
+        Find your new favorite restaurant in Boston!
+      </button>
+  </div>
+  </form>
+  </div>
+  <div class="result_div">
+    <h1 id="output_message">{{output_message}}</h1>
+    {% if legend_bool %}
+    <div id="filter_info">
+      <p id="search_pref">Search Preferences:</p>
+      <ul>
+        {% for filter in filter_message %}
+        <li>{{filter}}: {{filter_message[filter]}}</li>
+        {% endfor %}
+      </ul>
+      =======
       </form>
     </div>
     <div class="result_div">
-        <h1 id="output_message">{{output_message}}</h1>
-        {% if legend_bool %}
-        <div id="filter_info">
-            <p id="search_pref">Search Preferences:</p>
-            <ul>
-                {% for filter in filter_message %}
-                <li>{{filter}}: {{filter_message[filter]}}</li>
-                {% endfor %}
-            </ul>
-        </div>
+      <h1 id="output_message">{{output_message}}</h1>
+      {% if legend_bool %}
+      <div id="filter_info">
+        <p id="search_pref">Search Preferences:</p>
+        <ul>
+          {% for filter in filter_message %}
+          <li>{{filter}}: {{filter_message[filter]}}</li>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <div id="dollar_legend">
-            <p id="legend_label">Price per Person in Dollars:</p>
-            <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
-        </div>
-        {% endif %}
-        {% for d in data %}
-        <div class="rec_info">
-            <div class="summary">
-            <div class="name_div">
-                <a
-                class="restaurant_name"
-                href="https://www.yelp.com/biz/{{data[d]['id']}}"
-                >{{d}}</a
-                >
-                <p>({{data[d]['sim_score']}}% Match)</p>
-            </div>
-            <div class="categories">
-                <p class="categories_label">Categories:</p>
-                <p>{{data[d]['categories']}}</p>
-            </div>
-            <p>{{data[d]['address']}}</p>
+      <div id="dollar_legend">
+        <p id="legend_label">Price per Person in Dollars:</p>
+        <p>$ = under 10, $$ = 11-30, $$$ = 31-60, $$$$ = 61+, $$$$ = 61++</p>
+      </div>
+      {% endif %} {% for d in data %}
+      <div class="rec_info">
+        <div class="summary">
+          <div class="name_div">
+            <a class="restaurant_name" href="https://www.yelp.com/biz/{{data[d]['id']}}">{{d}}</a>
+            <p>({{data[d]['sim_score']}}% Match)</p>
+          </div>
+          <div class="categories">
+            <p class="categories_label">Categories:</p>
+            <p>{{data[d]['categories']}}</p>
+          </div>
+          <p>{{data[d]['address']}}</p>
 
-            <div class="icon_info">
-                <div class="stars">
-                    {% for star in range(data[d]['star rating']) %}
-                    <p>★</p>
-                    {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
-                    <p>☆</p>
-                    {% endfor %}
-                </div>
-                <div>
-                    <p class="divider"> | </p>
-                </div>
-                <div class="dollar_signs">
-                    {% for dollar in range(data[d]['price']) %}
-                    <p>$</p>
-                    {% endfor %}
-                </div>
+          <div class="icon_info">
+            <div class="stars">
+              {% for star in range(data[d]['star rating']) %}
+              <p>★</p>
+              {% endfor %} {% for star in range(5 - data[d]['star rating']) %}
+              <p>☆</p>
+              {% endfor %}
             </div>
-
+            <div>
+              <p class="divider">|</p>
             </div>
-            <div class="review_pic">
-            <img src="{{data[d].photos[0]}}" width="250px" />
-            <div class="review_info">
-                <p class="review_label">Reviews:</p>
-                {% for r in data[d]['reviews'] %}
-                <p>"{{r}}"</p>
-                {% endfor %}
+            <div class="dollar_signs">
+              {% for dollar in range(data[d]['price']) %}
+              <p>$</p>
+              {% endfor %}
             </div>
-            </div>
+          </div>
         </div>
-        {% endfor %}
+        <div class="review_pic">
+          <img src="{{data[d].photos[0]}}" width="250px" />
+          <div class="review_info">
+            <p class="review_label">Reviews:</p>
+            {% for r in data[d]['reviews'] %}
+            <p>"{{r}}"</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
 
     <footer>

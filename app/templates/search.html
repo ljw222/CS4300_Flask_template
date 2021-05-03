@@ -442,12 +442,32 @@
             />
             <p>Review Weight</p>
           </div>
-
+        </div>
+        <div class="form_group" id="slider_div">
+          <p>Ambiance Weight</p>
+          <input type="range" min="0" max="100" value="50" class="slider" name="weightRange" id="weightRange" />
+          <p>Review Weight</p>
+        </div>
+        <div id="button_div">
           <button type="submit">
             Find your new favorite restaurant in Boston!
           </button>
         </div>
-      </form>
+      </div>
+    </form>
+  </div>
+  <div class="result_div">
+    <h1 id="output_message">{{output_message}}</h1>
+    {% if legend_bool %}
+    <div id="filter_info">
+      <p id="search_pref">Search Preferences:</p>
+      <ul>
+        {% for filter in filter_message %}
+        <li>
+          <p>{{filter}}: </p>{{filter_message[filter]}}
+        </li>
+        {% endfor %}
+      </ul>
     </div>
     <div class="result_div">
       <h1 id="output_message">{{output_message}}</h1>
@@ -500,14 +520,15 @@
             </div>
           </div>
         </div>
-        <div class="review_pic">
-          <img src="{{data[d].photos[0]}}" width="250px" />
-          <div class="review_info">
-            <p class="review_label">Reviews:</p>
-            {% for r in data[d]['reviews'] %}
-            <p>"{{r}}"</p>
-            {% endfor %}
-          </div>
+      </div>
+      <div class="review_pic">
+        <img src="{{data[d].photos[0]}}" onerror="this.onerror=null;this.src='static/imagenotfound.png'"
+          width=" 250px" />
+        <div class="review_info">
+          <p class="review_label">Reviews:</p>
+          {% for r in data[d]['reviews'] %}
+          <p>"{{r}}"</p>
+          {% endfor %}
         </div>
       </div>
       {% endfor %}

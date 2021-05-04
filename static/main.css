@@ -1,14 +1,15 @@
 body {
     margin: 0;
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    font-size: 14px;
 }
 
-  .ui-helper-hidden-accessible {
-      display: none;
-  }
+.ui-helper-hidden-accessible {
+    display: none;
+}
 
-  .ui-autocomplete {
+.ui-autocomplete {
     max-height: 200px;
     overflow-y: auto;
     /* prevent horizontal scrollbar */
@@ -16,24 +17,25 @@ body {
     /* add padding to account for vertical scrollbar */
     padding-right: 20px;
     padding-bottom: 10px;
-  }
-  .ui-menu {
+}
+
+.ui-menu {
     box-shadow: 5px 0px 8px rgb(34, 147, 151);
-  }
+}
 
-  a:hover {
+a:hover {
     background-color: rgb(114, 208, 211);
-  }
+}
 
-  .ui-helper-hidden-accessible {
+.ui-helper-hidden-accessible {
     overflow: hidden;
     padding: 0;
     position: absolute;
     width: 1px;
     padding-bottom: 5px;
-  }
+}
 
-  .ui-autocomplete {
+.ui-autocomplete {
     position: absolute;
     padding: 5px 5px 5px 5px;
     margin: 5px 5px 5px 5px;
@@ -43,270 +45,261 @@ body {
     border-style: solid;
     border-width: 1px;
     padding-bottom: 10px;
-  }
+}
 
-  #header {
+#header {
     text-align: center;
-  }
+}
 
-  #header img {
-      width: 50%;
-  }
+#header img {
+    width: 50%;
+}
 
-  /* footer styling */
-  footer {
+/* footer styling */
+footer {
     background-color: rgb(3, 152, 158);
     padding: 10px;
-  }
+}
 
-  footer p {
+footer p {
     color: #e5fcf5;
     text-align: center;
-  }
+}
 
-  /* form styling */
-  form {
+/* form styling */
+form {
     width: 50%;
     margin: 0 auto;
     padding-bottom: 50px;
-  }
+}
 
-  abbr {
+abbr {
     text-decoration: none;
     color: rgb(3, 152, 158);
-  }
+}
 
-  .form_group {
+.form_group {
     display: flex;
     padding-bottom: 10px;
-  }
+}
 
-  label {
+label {
     width: 50%;
     text-align: right;
     padding-right: 10px;
-  }
+}
 
-  #review_instructions {
+#review_instructions {
     width: 50%;
     text-align: right;
     padding-right: 10px;
-  }
+}
 
-  #review_instructions p {
+#review_instructions p {
     font-style: italic;
     margin-top: 2px;
     padding-right: 10px;
-  }
+}
 
-  #ambianceLabel {
+#ambianceLabel {
     width: 50%;
     text-align: right;
     padding-right: 10px;
-  }
+}
 
-  #slider_div {
+#slider_div {
     margin-left: 30%;
-  }
+}
 
-  select {
+select {
     width: 100px;
-  }
+}
 
-  button {
+button {
     padding: 10px;
     color: white;
     background-color: #c6878f;
     border-radius: 10px;
     border: none;
     font-weight: bold;
-    /* margin-left: 300px;
-    margin-top: 10px; */
-  }
+}
 
-  #button_div {
+#button_div {
     text-align: center;
-  }
+}
 
-  textarea {
+textarea {
     width: 350px;
     height: 200px;
-  }
+}
 
-  .fav_name_input {
+.fav_name_input {
     width: 225px;
-  }
+}
 
-  input.invalid {
+input.invalid {
     border-color: #c6878f;
-  }
+}
 
-  .hidden {
+.hidden {
     display: none;
-  }
+}
 
-  li p {
-      display: inline-block;
-      padding-right: 4px;
-      font-weight: bold;
-      margin: 0;
-      color: #4a5899;
-  }
+li p {
+    display: inline-block;
+    padding-right: 4px;
+    font-weight: bold;
+    margin: 0;
+    color: #4a5899;
+}
 
-  /* #fav_restaurant_div {
-      width: 300px;
-      text-align: right;
-      padding-right: 10px;
-  } */
-
-  #review_instructions_p {
+#review_instructions_p {
     font-style: italic;
     margin-top: 2px;
-    /* padding-right: 10px; */
     color: #4a5899;
-  }
+}
 
-  #review_instructions label {
-      padding-right: 0 !important;
-  }
+#review_instructions label {
+    padding-right: 0 !important;
+}
 
-  #fav_restaurant_p {
+#fav_restaurant_p {
     font-style: italic;
     color: #4a5899;
     margin-top: -7px;
-  }
+}
 
-  /* output styling */
-  h1 {
+/* output styling */
+h1 {
     font-size: 26px;
     margin-top: 30px;
     margin-left: 30px;
     margin-bottom: 0px;
-  }
+}
 
-  .rec_info {
+.rec_info {
     margin: 30px;
     border: 1px solid #b79d94;
     padding: 15px;
     border-radius: 30px;
     margin-top: 10px;
-  }
+}
 
-  .restaurant_name {
+.restaurant_name {
     margin-bottom: 5px;
     margin-top: 10px;
     font-weight: 900;
     font-size: 24px;
     color: #16425b;
-  }
+}
 
-  .summary p {
+.summary p {
     margin: 0;
-  }
+}
 
-  .review_pic {
+.review_pic {
     display: flex;
     margin-top: 20px;
-  }
+}
 
-  .review_pic img {
+.review_pic img {
     margin: auto;
     padding-right: 10;
-  }
+}
 
-  .review_info p {
+.review_info p {
     margin-top: 15px;
     font-style: italic;
     margin-bottom: 0;
-  }
+}
 
-  .review_info {
+.review_info {
     margin-left: 10px;
     margin-right: 10px;
-  }
+}
 
-  .review_label {
+.review_label {
     margin-top: 0 !important;
     font-style: normal !important;
     margin-bottom: 5px;
     font-weight: 600;
     color: #4a5899;
     margin-bottom: -10px !important;
-  }
+}
 
-  .stars {
+.stars {
     display: flex;
-  }
+}
 
-  .categories {
+.categories {
     display: flex;
-  }
+}
 
-  .categories_label {
+.categories_label {
     font-style: normal !important;
     margin-bottom: 5px;
     font-weight: 600;
     color: #4a5899;
     padding-right: 5px;
-  }
+}
 
-  .name_div {
+.name_div {
     display: flex;
     align-items: center;
-  }
+}
 
-  .name_div p {
+.name_div p {
     margin-bottom: 5px;
     margin-top: 10px;
     font-weight: 600;
     font-size: 20px;
     color: #16425b;
     padding-left: 5px;
-  }
+}
 
-  .dollar_signs {
+.dollar_signs {
     display: flex;
     font-size: 18;
     margin-top: 3px;
-  }
+}
 
-  .icon_info {
+.icon_info {
     display: flex;
-  }
+}
 
-  .divider {
+.divider {
     font-size: 18px;
     margin-top: 4px !important;
     margin-left: 5px !important;
     margin-right: 5px !important;
-  }
+}
 
-  #dollar_legend {
-      display: flex;
-      margin-left: 31px;
-      height: 35px;
-  }
+#dollar_legend {
+    display: flex;
+    margin-left: 31px;
+    height: 35px;
+}
 
-  #legend_label {
+#legend_label {
     font-style: normal !important;
     font-weight: 600;
     color: #c6878f;
     padding-right: 5px;
-  }
+}
 
-  #filter_info {
+#filter_info {
     margin-left: 30px;
-  }
+}
 
-  #search_pref {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      font-size: 20px;
-      color: #16425b;
-      font-weight: bold;
-  }
-
-  ul {
+#search_pref {
     margin-top: 5px;
     margin-bottom: 5px;
-  }
+    font-size: 20px;
+    color: #16425b;
+    font-weight: bold;
+}
+
+ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

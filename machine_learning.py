@@ -27,14 +27,10 @@ def train():
   for restaurant, restaurant_dict in data['BOSTON'].items():
     ambiances = restaurant_dict['ambience']
     review_texts = [r['text'] for r in restaurant_dict['reviews']]
-    # review_stars = [r['stars'] for r in restaurant_dict['reviews']]
-    review_combined = '\n'.join(review_texts)
-    # stars_avg = sum(review_stars)/len(review_stars)
+    review_combined = '\n'.join(review_texts) # join the two reviews into one
     new_row = dict()
     new_row['restaurant'] = restaurant
     new_row['reviews'] = review_combined
-    # new_row['price'] = restaurant_dict['price']
-    # new_row['stars'] = stars_avg
     for label in ambiance_labels:
         if label in ambiances:
             new_row[label] = 1
@@ -43,7 +39,7 @@ def train():
     if len(ambiances) > 0:
         df = df.append(new_row, ignore_index=True)
   print("df finished")
-  manual = pd.read_csv("manual_data.csv")
+  manual = pd.read_csv("manual_data.csv") # add in this manual data to boost some features we want
   df = pd.concat([df, manual, manual, manual], axis=0, ignore_index=True)
   for col in ambiance_labels:
     df[col] = df[col].astype(int)
@@ -56,6 +52,7 @@ def train():
   with open("ml_vectorizer.sav", "wb") as f:
     pickle.dump(vec, f)
   names = vec.get_feature_names()
+  # commented out code below was for when we did cross validation
 
   # param_grid = {'C': [1, 10, 100], 
   #             'gamma': [1, 0.1, 0.01],

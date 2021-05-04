@@ -9,7 +9,7 @@ import pickle
 from sklearn.metrics import classification_report, confusion_matrix
 from imblearn.over_sampling import SMOTE
 import nltk
-# from nltk.corpus import stopwords
+from nltk.corpus import stopwords
 import re
 
 stop_words = ["floor", "restaurant", "owner", "food", "counter", "windy", "radius", "ingredients", "hours", "person",

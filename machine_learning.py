@@ -1,4 +1,3 @@
-from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 import json
 import pandas as pd
@@ -9,6 +8,13 @@ from sklearn.metrics import balanced_accuracy_score, make_scorer, f1_score
 import pickle
 from sklearn.metrics import classification_report, confusion_matrix
 from imblearn.over_sampling import SMOTE
+import nltk
+from nltk.corpus import stopwords
+import re
+
+stop_words = ["floor", "restaurant", "owner", "food", "counter", "windy", "radius", "ingredients", "hours", "person", 
+             "review", "people", "everybody", "eat", "ate", "plate", "plated", "order", "ordered", "today"]
+stop_words = stopwords.words("english") + stop_words
 
 ambiance_labels = ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']
 
@@ -21,14 +27,10 @@ def train():
   for restaurant, restaurant_dict in data['BOSTON'].items():
     ambiances = restaurant_dict['ambience']
     review_texts = [r['text'] for r in restaurant_dict['reviews']]
-    # review_stars = [r['stars'] for r in restaurant_dict['reviews']]
-    review_combined = '\n'.join(review_texts)
-    # stars_avg = sum(review_stars)/len(review_stars)
+    review_combined = '\n'.join(review_texts) # join the two reviews into one
     new_row = dict()
     new_row['restaurant'] = restaurant
     new_row['reviews'] = review_combined
-    # new_row['price'] = restaurant_dict['price']
-    # new_row['stars'] = stars_avg
     for label in ambiance_labels:
         if label in ambiances:
             new_row[label] = 1
@@ -36,50 +38,54 @@ def train():
             new_row[label] = 0
     if len(ambiances) > 0:
         df = df.append(new_row, ignore_index=True)
-  # for col in ambiance_labels + ['price']:
+  print("df finished")
+  manual = pd.read_csv("manual_data.csv") # add in this manual data to boost some features we want
+  df = pd.concat([df, manual, manual, manual], axis=0, ignore_index=True)
   for col in ambiance_labels:
     df[col] = df[col].astype(int)
 
-  # X = df[['reviews', 'stars', 'price']]
+  df['reviews'] = df['reviews'].apply(lambda x: " ".join([t.lower() for t in x.split() if t.lower() not in stop_words and bool(re.match(r"^[a-zA-Z]+$", t))]))
   X = df['reviews']
   Y = df[ambiance_labels]
-  print(Y.shape)
   vec = TfidfVectorizer()
   X_features = pd.DataFrame(vec.fit_transform(X).toarray())
   with open("ml_vectorizer.sav", "wb") as f:
     pickle.dump(vec, f)
-  # Xtrain_features['stars'] = X_train['stars'].reset_index()['stars']
-  # Xtrain_features['price'] = X_train['price'].reset_index()['price']
-  # Xtest_features['stars'] = X_test['stars'].reset_index()['stars']
-  # Xtest_features['price'] = X_test['price'].reset_index()['price']
+  names = vec.get_feature_names()
+  # commented out code below was for when we did cross validation
 
-  svm = SVC()
   # param_grid = {'C': [1, 10, 100], 
   #             'gamma': [1, 0.1, 0.01],
   #             'kernel': ['rbf', 'linear']} 
-  param_grid = {'C': [20, 10, 1, 0.5, 0.25, 0.1]}
+  # param_grid = {'C': [10, 1, 0.5, 0.25, 0.1]}
 
   models = dict()
     
-  grid = GridSearchCV(LogisticRegression(), param_grid, refit = True, verbose = 0, scoring="f1_weighted")
+  # grid = GridSearchCV(LogisticRegression(), param_grid, refit = True, verbose = 0, scoring="f1_weighted")
   for col in ambiance_labels:
+    X = X_features
+    y = Y[col]
     print(col)
-    X_train, X_test, y_train, y_test = train_test_split(X_features, Y[col], test_size=0.3, random_state=42)
-    X_train, y_train = SMOTE(random_state=42).fit_resample(X_train, y_train)
+    X_sm, y_sm = SMOTE(random_state=42).fit_resample(X, y)
+    X_train, X_test, y_train, y_test =  train_test_split(X_sm, y_sm, test_size=0.3, random_state=42)
     print("Positive: ", len(y_train[y_train==1]))
     print("Negative: ", len(y_train[y_train==0]))
-    grid.fit(X_train, y_train)
-    print(grid.best_score_)
-    print(grid.best_estimator_)
-    model = grid.best_estimator_
+    # grid.fit(X_train, y_train)
+    # print(grid.best_score_)
+    # print(grid.best_estimator_)
+    # model = grid.best_estimator_
+    model = LogisticRegression(C=1)
+    model.fit(X_train, y_train)
     preds = model.predict(X_test)
     print(confusion_matrix(y_test, preds))
     print(classification_report(y_test, preds))
     models[col] = model
-
-  print(models)
-  for col in ambiance_labels:
-    pickle.dump(models[col], open(f"model_{col}.sav", "wb"))
+    importance = model.coef_[0]
+    importances = sorted([(i, v) for i, v in enumerate(importance)], key=lambda x: -x[1])
+    for i,v in importances[:10]:
+        print(f'Feature: {names[i]}, Score: {v}')
+    print("")
+    pickle.dump(model, open(f"model_{col}.sav", "wb"))
 
 
 def predict(review, ambiance_label):

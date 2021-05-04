@@ -1,6 +1,6 @@
 import json
 
-input_file = open('finalData.json', 'r')
+input_file = open('finalData2.json', 'r')
 output_file = open('finalDataWithIDs.json', 'w')
 
 review_index = 0 # id for reviews

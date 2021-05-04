@@ -154,6 +154,10 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     restaurant_ambiances.append(small_data[rest[0]]["ambience"])
 
   if not user_review:
+    print(type(ambiance))
+    print(ambiance)
+    print(type(small_data[restaurant]["ambience"]))
+    print(small_data[restaurant]["ambience"])
     user_and_rest_ambiances = list(set(ambiance + (small_data[restaurant]["ambience"])))
   else:
     predicted_ambiances = []

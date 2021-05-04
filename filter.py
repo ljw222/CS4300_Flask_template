@@ -1,9 +1,10 @@
 import json
+import ast
 
 output_file = open('finalData.json', 'w')
 review_file = open('yelp_academic_dataset_review.json', 'r')
 business_file = open('yelp_academic_dataset_business.json', 'r')
-
+restaurant_name = open('resturant.json', 'w')
 """
 #final json will be a dic where the keys are a city and state (ex: "New York, NY")
 #these keys then map to a new dic, where the keys are the restaurants names.
@@ -34,6 +35,7 @@ for line in business_file:
   categories = current_json["categories"]
   state = current_json["state"]
   city = current_json["city"]
+  name = current_json["name"]
 
   if (not categories is None) and ("Restaurants" in categories) and (num_reviews >= 5) and (city.upper() in ne) and (star in star_range) :
     id_dic = {}
@@ -47,6 +49,7 @@ for line in business_file:
     id_dic["city"] = city
     id_dic["state"] = state
     #id_dic["attributes"] = attributes
+    id_dic["ID"] = bus_id
     attribute = current_json["attributes"]
     if attribute is None:
       pricerange = 3
@@ -57,12 +60,20 @@ for line in business_file:
           pricerange = attribute["RestaurantsPriceRange2"]
     id_dic["price"] = pricerange
     if attribute is None:
-      ambience = ""
+      ambience = []
     else:
       if "Ambience" not in attribute:
-        ambience = ""
+        ambience = []
+      elif attribute["Ambience"] == "None":
+        ambience = []
       else:
-          ambience = attribute["Ambience"]
+          dic = attribute["Ambience"]
+          temp = []
+          my_dict = ast.literal_eval(dic)
+          for k,v in my_dict.items():
+              if v== True:
+                  temp.append(k)
+          ambience = temp
     id_dic["ambience"] = ambience
     id_dic["categories"] = categories
     id_dic["reviews"] = [] #initialize reviews as an empty list--these will be put in later
@@ -75,7 +86,7 @@ for line in review_file:
   review_dic = {}
   bus_id = current_json["business_id"]
   #only look at restaurants from json_merge dic
-  if bus_id in json_merge:
+  if bus_id in json_merge and current_json["stars"] >= 3:
     bus_dic = json_merge[bus_id] #dictionary of the current restaurant
     stars = current_json["stars"]
     useful = current_json["useful"]
@@ -110,7 +121,8 @@ for key in json_merge:
   reviews2 = reviews[:2]
   print(len(reviews2))
 
-
+  ids = json_merge[key]["ID"]
+  info_dic["id"] = ids
   price = json_merge[key]["price"]
   info_dic["price"] = price
   categories = json_merge[key]["categories"]

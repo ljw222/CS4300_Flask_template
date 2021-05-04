@@ -1,0 +1,13 @@
+restaurant,reviews,touristy,classy,romantic,casual,hipster,divey,intimate,trendy,upscale
+manual,this is a very classy restaurant,0,1,0,0,0,0,0,0,1
+manual,this is a very casual restaurant,0,0,0,1,0,0,0,0,0
+manual,"this is a nice, romantic, intimate place to eat",0,0,1,0,0,0,1,0,0
+manual,this is a toursity restaurant,1,0,0,0,0,0,0,0,0
+manual,this is a great place to try new things,1,0,0,0,0,0,0,1,1
+manual,this place gave me hipster vibes,0,0,0,0,1,0,0,0,0
+manual,this bar has very good beer,0,0,0,1,0,1,0,0,0
+manual,this is a good dive restaurant,0,0,0,0,0,1,0,0,0
+manual,this is a divey restaurant,0,0,0,0,0,1,0,0,0
+manual,this restaurant is very trendy,0,0,0,0,0,0,0,1,0
+manual,it is very modern and has the latest food trends,0,0,0,0,0,0,0,1,1
+manual,this is an upscale restaurant,0,0,0,0,0,0,0,0,1

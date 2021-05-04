@@ -9,16 +9,13 @@ import pickle
 from sklearn.metrics import classification_report, confusion_matrix
 from imblearn.over_sampling import SMOTE
 import nltk
-from nltk.corpus import stopwords
 import re
 
-stop_words = ["floor", "restaurant", "owner", "food", "counter", "windy", "radius", "ingredients", "hours", "person", 
-             "review", "people", "everybody", "eat", "ate", "plate", "plated", "order", "ordered", "today"]
-stop_words = stopwords.words("english") + stop_words
-
-ambiance_labels = ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']
-
 def train():
+  stop_words = ["floor", "restaurant", "owner", "food", "counter", "windy", "radius", "ingredients", "hours", "person", 
+             "review", "people", "everybody", "eat", "ate", "plate", "plated", "order", "ordered", "today"]
+  stop_words = nltk.corpus.stopwords.words("english") + stop_words
+  ambiance_labels = ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']
   # use this for training/saving models
   with open("finalData2.json", "r") as f:
       data = json.load(f)

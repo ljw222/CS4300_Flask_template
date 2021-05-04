@@ -283,24 +283,22 @@
   </style>
 
   <head>
-    <!-- <link rel="stylesheet" href="./../../static/main.css" /> -->
-    <!-- <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='main.css') }}"
-    /> -->
+    <!-- <link rel="stylesheet" href="/static/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="/static/main.css" /> -->
+
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   </head>
 
   <body>
-    <!-- <img src="./../../static/BostonEats.png" alt="boston eats logo" /> -->
-    <img
-      src="{{url_for('static', filename='BostonEats.png')}}"
-      alt="boston eats logo"
-    />
     <div class="form_div">
       <form method="get">
+        <div id="header">
+          <img
+            src="{{url_for('static', filename='BostonEats.svg')}}"
+            alt="boston eats logo"
+          />
+        </div>
         <div>
           <div class="form_group">
             <label class="form_label" for="fav_name"
@@ -442,32 +440,13 @@
             />
             <p>Review Weight</p>
           </div>
+          <div id="button_div">
+            <button type="submit">
+              Find your new favorite restaurant in Boston!
+            </button>
+          </div>
         </div>
-        <div class="form_group" id="slider_div">
-          <p>Ambiance Weight</p>
-          <input type="range" min="0" max="100" value="50" class="slider" name="weightRange" id="weightRange" />
-          <p>Review Weight</p>
-        </div>
-        <div id="button_div">
-          <button type="submit">
-            Find your new favorite restaurant in Boston!
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="result_div">
-    <h1 id="output_message">{{output_message}}</h1>
-    {% if legend_bool %}
-    <div id="filter_info">
-      <p id="search_pref">Search Preferences:</p>
-      <ul>
-        {% for filter in filter_message %}
-        <li>
-          <p>{{filter}}: </p>{{filter_message[filter]}}
-        </li>
-        {% endfor %}
-      </ul>
+      </form>
     </div>
     <div class="result_div">
       <h1 id="output_message">{{output_message}}</h1>
@@ -476,7 +455,10 @@
         <p id="search_pref">Search Preferences:</p>
         <ul>
           {% for filter in filter_message %}
-          <li>{{filter}}: {{filter_message[filter]}}</li>
+          <li>
+            <p>{{filter}}:</p>
+            {{filter_message[filter]}}
+          </li>
           {% endfor %}
         </ul>
       </div>
@@ -520,15 +502,14 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="review_pic">
-        <img src="{{data[d].photos[0]}}" onerror="this.onerror=null;this.src='static/imagenotfound.png'"
-          width=" 250px" />
-        <div class="review_info">
-          <p class="review_label">Reviews:</p>
-          {% for r in data[d]['reviews'] %}
-          <p>"{{r}}"</p>
-          {% endfor %}
+        <div class="review_pic">
+          <img src="{{data[d].photos[0]}}" width="250px" />
+          <div class="review_info">
+            <p class="review_label">Reviews:</p>
+            {% for r in data[d]['reviews'] %}
+            <p>"{{r}}"</p>
+            {% endfor %}
+          </div>
         </div>
       </div>
       {% endfor %}
@@ -543,7 +524,7 @@
     </footer>
     <!-- Javascript -->
     <script type="text/javascript">
-      // get all restuarant names
+      // need to get all names of restaurants from dict in rankings.py
       var restaurants_string = "{{ restaurant_list }}";
       var restaurants_string_cleaned = restaurants_string.replaceAll(
         "&#34;",

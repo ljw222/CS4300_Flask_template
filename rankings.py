@@ -164,6 +164,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
     for label in ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']:
       if predict(review_text, label):
         predicted_ambiances.append(label)
+    # print(predicted_ambiances)
     user_and_rest_ambiances = list(set(ambiance + predicted_ambiances))
 
   jaccard_list = []

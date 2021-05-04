@@ -3,6 +3,7 @@ body {
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
     font-size: 14px;
+    font-size: 90%;
 }
 
 .ui-helper-hidden-accessible {
@@ -68,7 +69,7 @@ footer p {
 
 /* form styling */
 form {
-    width: 50%;
+    width: 60%;
     margin: 0 auto;
     padding-bottom: 50px;
 }
@@ -107,8 +108,19 @@ label {
     padding-right: 10px;
 }
 
+#instructions {
+    color: rgb(3, 152, 158);
+    font-style: italic;
+    text-align: center;
+    margin-top: 0;
+}
+
 #slider_div {
-    margin-left: 30%;
+    display: flex;
+}
+
+#slider_div_center {
+    justify-content: center;
 }
 
 select {
@@ -167,11 +179,12 @@ li p {
     font-style: italic;
     color: #4a5899;
     margin-top: -7px;
+    text-align: center;
 }
 
 /* output styling */
 h1 {
-    font-size: 26px;
+    font-size: 22px;
     margin-top: 30px;
     margin-left: 30px;
     margin-bottom: 0px;
@@ -189,7 +202,7 @@ h1 {
     margin-bottom: 5px;
     margin-top: 10px;
     font-weight: 900;
-    font-size: 24px;
+    font-size: 20px;
     color: #16425b;
 }
 
@@ -252,7 +265,7 @@ h1 {
     margin-bottom: 5px;
     margin-top: 10px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     color: #16425b;
     padding-left: 5px;
 }
@@ -294,7 +307,7 @@ h1 {
 #search_pref {
     margin-top: 5px;
     margin-bottom: 5px;
-    font-size: 20px;
+    font-size: 18px;
     color: #16425b;
     font-weight: bold;
 }

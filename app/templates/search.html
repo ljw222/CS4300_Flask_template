@@ -42,19 +42,23 @@
                         </div>
                         <textarea name="user_review" id="user_review"></textarea>
                     </div>
+                    <div id="instructions_div">
+                        <p id="instructions">Please input a preferred price point, cuisine, and ambiance. Then, use the slider to choose whether you want recommendations based more closely on the theme (review weight) or dining experience (ambiance weight) of your input. Specify cuisines and/or have a higher review weight to find restaurants with similar themes, and specify ambiance and/or have a higher ambiance weight to find restaurants with a similar dining experience
+                        </p>
+                    </div>
                     <div class="form_group">
-                        <label for="max_price">Price Point:</label>
+                        <label for="max_price">Preferred Price Point:</label>
                         <select name="max_price" id="max_price">
-                            <option value=""></option>
+                            <option value="">No Preference</option>
                             <option value="low">Low (~$10)</option>
                             <option value="medium">Medium (~$30)</option>
                             <option value="high">High (~$60)</option>
                         </select>
                     </div>
                     <div class="form_group">
-                        <label for="cuisine">Cuisine:</label>
+                        <label for="cuisine">Preferred Cuisine:</label>
                         <select name="cuisine" id="cuisine">
-                            <option value=""></option>
+                            <option value="">No Preference</option>
                             <option value="Italian">Italian</option>
                             <option value="Mexican">Mexican</option>
                             <option value="Indian">Indian</option>
@@ -67,7 +71,7 @@
                         </select>
                     </div>
                     <div class="form_group">
-                        <p id="ambianceLabel">Ambiance:</p>
+                        <p id="ambianceLabel">Preferred Ambiances:</p>
                         <div class="checkbox_div">
                             <input
                                 type="checkbox"
@@ -129,18 +133,21 @@
                             <label for="ambiance8">Casual</label><br />
                         </div>
                     </div>
-                    <div class="form_group" id="slider_div">
-                        <p>Ambiance Weight</p>
-                        <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value="50"
-                        class="slider"
-                        name="weightRange"
-                        id="weightRange"
-                        />
-                        <p>Review Weight</p>
+                    <div class="form_group" id="slider_div_center">
+                        <div id="slider_div">
+                            <p></p>
+                            <p>Ambiance Weight</p>
+                            <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value="50"
+                            class="slider"
+                            name="weightRange"
+                            id="weightRange"
+                            />
+                            <p>Review Weight</p>
+                        </div>
                     </div>
                     <div id="button_div">
                         <button type="submit">

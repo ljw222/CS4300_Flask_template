@@ -8,3 +8,4 @@ vagrant/a4keypair.pem
 *.iml
 .vscode/
 .ipynb_checkpoints/
+.DS_Store

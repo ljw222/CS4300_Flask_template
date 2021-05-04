@@ -12,7 +12,7 @@ def getwords(sent):
 stemmer = PorterStemmer()
 def build_vectorizer():
   """Returns a TfidfVectorizer object with certain preprocessing properties.
-  
+
   Params: {max_n_terms: Integer,
             max_prop_docs: Float,
             min_n_docs: Integer}
@@ -62,13 +62,13 @@ def filterRestaurants(price_query, cuisine_query):
   """
 def get_cos_sim(old_review_index, new_review_vector, new_review_norm, input_doc_mat):
   """Returns the cosine similarity of two restaurants.
-  
+
   Params: {old_review_index: int,
             new_review_vector: np.ndarray,
             new_review_norm: int,
             input_doc_mat: np.ndarray,
             }
-  Returns: Float 
+  Returns: Float
   """
   #get indicies of movie1 and movie2 and get their tf-idf vectors
   #mov1_index = movie_name_to_index[mov1]
@@ -80,6 +80,9 @@ def get_cos_sim(old_review_index, new_review_vector, new_review_norm, input_doc_
   #get norms of both vectors
   old_review_norm = np.linalg.norm(old_review_vector)
   denom = new_review_norm * old_review_norm
+  # print("get cos sim")
+  # print(old_review_index)
+  # print(sum(new_review_vector))
   return dot/denom
 
 
@@ -98,28 +101,28 @@ def computeCosine(review, filter_restaurants):
   #with open('vectorizer.pickle', 'rb') as v:
     #tfidf_vec = pickle.load(v)
   tfidf_vec = build_vectorizer()
-  
+
   with open('reviewslist2.json', 'r') as f:
     reviews_list = json.load(f)
 
   all_words = getwords(review)
   stem_text = [stemmer.stem(t.lower()) for t in all_words if bool(re.match(r"^[a-zA-Z]+$", t))]
- 
+
   #create tf idf matrix
   tfidf_mat = tfidf_vec.fit_transform(reviews_list).toarray()
-  print(tfidf_mat.shape)
-  print(np.sum(tfidf_mat))
+  # print(tfidf_mat.shape)
+  # print(np.sum(tfidf_mat))
   #convert review to a vector
   reviews = []
   reviews.append(" ".join(stem_text))
   review_vector = tfidf_vec.transform(reviews).toarray()
-  print(review_vector.shape)
-  print(np.sum(review_vector))
+  # print(review_vector.shape)
+  # print(np.sum(review_vector))
   review_norm = np.linalg.norm(review_vector)
-  
+
   #calculate the cos similarities between new review and other restaurants
   cos_similarities = np.zeros(len(reviews_list))
-  print(len(reviews_list))
+  # print(len(reviews_list))
   for res_index in filter_restaurants:
     res_name = rankings.index_to_restaurant[res_index]
     #get the reviews corresponding to that restaurant

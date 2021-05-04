@@ -6,7 +6,6 @@ import string
 import time
 import numpy as np
 from nltk.tokenize import TreebankWordTokenizer
-#from IPython.core.display import HTML
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem import PorterStemmer
 import re
@@ -43,21 +42,15 @@ cos_sim_matrix = np.array(np.load('cossim4.npy'))
 small_data = data['BOSTON']
 
 index_to_restaurant = {i: v for i, v in enumerate(small_data.keys())}
-
 restaurant_to_index = {v: i for i, v in index_to_restaurant.items()}
-
 restaurant_list = list(restaurant_to_index.keys())
-
-def showpage():
-  restaurant_list = list(restaurant_to_index.keys())
-  restaurant_list = json.dumps(restaurant_list)
-  return render_template("./app/templates/search.html",restaurant_list=restaurant_list)
-
-#sims cos load
 
 review_splitter = [ids[0] for ids in review_idx_for_restaurant.values()][1:]
 
 def get_ranked_restaurants(in_restaurant, sim_matrix, user_review):
+  """
+  Returns a list of sorted restaurants 
+  """
   # input restaurant will have 11 reviews
   # find every row that corresponds to a review for input restaurant
   # take the average of them
@@ -75,18 +68,12 @@ def get_ranked_restaurants(in_restaurant, sim_matrix, user_review):
   #rest_lst = rest_lst[:rest_idx] + rest_lst[rest_idx+1:]
   rest_lst = sorted(rest_lst, key=lambda x: -x[1])
   return rest_lst
-  #rest_idx = restaurant_to_index[in_restaurant]
-  #review_ids = review_idx_for_restaurant[in_restaurant]
-  #review_sims = sim_matrix[review_ids]
-  #review_sims = np.mean(review_sims, axis=0)
-  #restaurant_sims = [np.mean(arr) for arr in np.split(review_sims, review_splitter)]
-  #rest_lst = [(index_to_restaurant[i], s) for i,s in enumerate(restaurant_sims)]
-  #rest_lst = rest_lst[:rest_idx] + rest_lst[rest_idx+1:]
-  #rest_lst = sorted(rest_lst, key=lambda x: -x[1])
-  #return rest_lst
-
 
 # def main():
+#   """
+#   Prints the top 3 resulting restuarants for the parameters top_restaurants is 
+#   set to.
+#   """
 #   #get the restaurant name
 #   top_restaurants = get_top("Boloco", "high", "Chinese", [], 5, .5, .5)
 #   print(len(top_restaurants))
@@ -99,7 +86,8 @@ def get_ranked_restaurants(in_restaurant, sim_matrix, user_review):
 #     print("")
 
 def getJaccard(input_ambiances, all_rests_ambiances):
-  """Returns a list of the size number of restuarants that indicates the jaccard
+  """
+  Returns a list of the size number of restuarants that indicates the jaccard
   sim between the inputted restuarants ambiances and the existing restaurants'
   Returns a list of size number of restuarants total, where entry
   i is the jaccard sim between the inputted restuarants ambiances and the
@@ -119,7 +107,8 @@ def getJaccard(input_ambiances, all_rests_ambiances):
   return jaccard_ambiances
 
 def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance_weight, user_review, user_matrix, review_text=None):
-  """Returns a list of the top n restuarants that match the inputted restaurant
+  """
+  Returns a list of the top n restuarants that match the inputted restaurant
   and preferences indicated
   Params: {
     restaurant: string
@@ -134,7 +123,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   }
   Returns: list
   """
-  # print(ambiance_weight, review_weight)
+  # initialize if user has preferences
   price_preference = True
   cuisine_preference = True
   ambiance_preference = True
@@ -143,11 +132,13 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   if cuisine == "":
     cuisine_preference = False
 
+  # recommended restaurants
   recs = []
 
   if not user_review:
+    # get cossim list of sorted ranked restaurants (highest similarity to least 
+    # similarity)
     ranked = get_ranked_restaurants(restaurant, cos_sim_matrix, False)
-  #rankings for user review
   else:
     ranked = get_ranked_restaurants("", user_matrix, True)
 
@@ -160,9 +151,10 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   for rest in ranked:
     ranked_names.append(rest[0])
     ranked_cossims.append(rest[1])
-    restaurant_ambiances.append(data["BOSTON"][rest[0]]["ambience"])
+    restaurant_ambiances.append(small_data[rest[0]]["ambience"])
+
   if not user_review:
-    user_and_rest_ambiances = list(set(ambiance + (data["BOSTON"][restaurant]["ambience"])))
+    user_and_rest_ambiances = list(set(ambiance + (small_data[restaurant]["ambience"])))
   else:
     predicted_ambiances = []
     for label in ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']:
@@ -177,13 +169,15 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   weighted_rankings = []
   weighted_name_ranks = []
 
+  # determine whether there are user or restuarant ambiance preferences and then
+  # creates a weighted jaccard and cosine similarity list (sorted from highest 
+  # similarity to lowest)
   if len(user_and_rest_ambiances) == 0:
     ambiance_preference = False
     weighted_cossim = [el for el in ranked_cossims]
     weighted_rankings = [x for x in weighted_cossim]
     for i in range(len(ranked_names)):
       weighted_name_ranks.append((ranked_names[i], weighted_rankings[i]))
-    #weighted_name_ranks = ranked
   else:
     weighted_cossim = [el * review_weight for el in ranked_cossims]
     weighted_jaccard = [el * ambiance_weight for el in jaccard_list]
@@ -192,22 +186,22 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
       weighted_name_ranks.append((ranked_names[i], weighted_rankings[i]))
   weighted_name_ranks = sorted(weighted_name_ranks, key=lambda x: -x[1])
 
+  # traverse through sorted restaurant list to filter top restaurants
   for restaurant_info in weighted_name_ranks: # restaurant_info = (name, weighted sim score)
     if len(recs) == n: # if have enough top places, stop finding more
       break
     name = restaurant_info[0] # name of restaurant
     ranking = restaurant_info[1]
-    price = int(data["BOSTON"][name]["price"]) # price preference
+    price = int(small_data[name]["price"]) # price preference
 
-    # no filtering
+    # no price, cuisine, or ambiance preference
     if (not price_preference) and (not cuisine_preference) and (not ambiance_preference):
       recs.append((name, ranking))
     else:
-      cuisines = data["BOSTON"][name]["categories"] # array of tagged cuisines
+      cuisines = small_data[name]["categories"] # array of tagged cuisines
 
       price_match = False
       cuisine_match = False
-      # ambiance_match = False
 
       if price_preference: # if there is a price preference
         low = (max_price == "low") and (price == 1 or price ==2)
@@ -232,57 +226,84 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   return recs
 
 def get_reviews(restaurant):
+  """
+  Return list of reviews for a given restaurant name.
+  Params: {
+    restaurant: string 
+  }
+  Returns: string list
+  """
   reviews = []
-  for review in data["BOSTON"][restaurant]["reviews"]:
+  for review in small_data[restaurant]["reviews"]:
     reviews.append(review["text"])
   return reviews
 
 def web_scraping(restaurants, sim_scores, input_index):
-  try:
-    full_info = dict()
-    requests_session = requests.Session()
-    for i in range(len(restaurants)):
-      r = restaurants[i]
-      sim_score = round(sim_scores[i] * 100, 2)
-      info = dict()
-      bus_id = small_data[r]['id']
-      page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
-      print("request made")
-      soup = BeautifulSoup(page.content, 'lxml')
+  """
+  Returns a list of attributes for all the restaurants.
+  Params: {
+    restaurants: string list
+    max_price: float list
+    input_index: int list
+  }
+  Returns: list
+  """
+  full_info = dict()
+  requests_session = requests.Session()
+  for i in range(len(restaurants)):
+    r = restaurants[i]
+    sim_score = round(sim_scores[i] * 100, 2)
+    info = dict()
+    bus_id = small_data[r]['id']
+    page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
+    print("request made")
+    soup = BeautifulSoup(page.content, 'lxml')
+    # search for photo
+    try:
       photos = soup.findAll('img', {"class": "photo-header-media-image__373c0__2Qf5H"})
-      image_srcs = []
-      for i, p in enumerate(photos):
-        src = p.attrs['src']
-        image_srcs.append(src)
-      info['photos'] = image_srcs
-      # search the title of the webpage for address
+    except:
+      photos = []
+    image_srcs = []
+    for i, p in enumerate(photos):
+      src = p.attrs['src']
+      image_srcs.append(src)
+    info['photos'] = image_srcs
+    # search for address
+    try:
       possible_addresses = soup.findAll('title', {"data-rh": "true"})
-      if len(possible_addresses) == 0:
-        info['address'] = "No address found"
-      else:
-        address = "No address found"
-        for p in possible_addresses:
-          if p.get_text() != "":
-            address = p.get_text()
-            for piece in address.split('- '):
-              if "Boston" in piece:
-                address = piece
-        info['address'] = address
+    except:
+      possible_addresses = []
+    if len(possible_addresses) == 0:
+      info['address'] = "No address found"
+    else:
+      address = "No address found"
+      for p in possible_addresses:
+        if p.get_text() != "":
+          address = p.get_text()
+          for piece in address.split('- '):
+            if "Boston" in piece:
+              address = piece
+      info['address'] = address
+    # search for star rating
+    try:
       rating_text = soup.findAll('div', {"class": re.compile("i-stars--large")})[0].attrs['aria-label']
       number = round(float(rating_text.split(' ')[0]))
       info['star rating'] = number
-      # get rid of word 'Restaurants' in categories list
+    except:
+      info['star rating'] = 0
+
+    # get rid of word 'Restaurants' in categories list and find categories
+    try:
       categories_string = small_data[r]['categories']
       categories_list = categories_string.split(', ')
       categories_list = [word for word in categories_list if word not in ['Restaurants']]
       info['categories'] = ', '.join(map(str, categories_list))
+    except:
+      info['categories'] = ""
 
-      full_info[r] = info
-      info['reviews'] = get_reviews(r)
-      info['id'] = bus_id
-      info['sim_score'] = sim_score
-      info['price'] = int(small_data[r]['price'])
-    return full_info
-  except IndexError as error:
-    print("error")
-    return web_scraping(restaurants, sim_scores, input_index)
+    full_info[r] = info
+    info['reviews'] = get_reviews(r)
+    info['id'] = bus_id
+    info['sim_score'] = sim_score
+    info['price'] = int(small_data[r]['price'])
+  return full_info

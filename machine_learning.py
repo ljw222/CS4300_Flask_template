@@ -12,7 +12,7 @@ import nltk
 import re
 
 def train():
-  stop_words = ["floor", "restaurant", "owner", "food", "counter", "windy", "radius", "ingredients", "hours", "person", 
+  stop_words = ["floor", "restaurant", "owner", "food", "counter", "windy", "radius", "ingredients", "hours", "person",
              "review", "people", "everybody", "eat", "ate", "plate", "plated", "order", "ordered", "today"]
   stop_words = nltk.corpus.stopwords.words("english") + stop_words
   ambiance_labels = ['touristy', 'classy', 'romantic', 'casual', 'hipster', 'divey', 'intimate', 'trendy', 'upscale']

@@ -286,6 +286,7 @@ def web_scraping(restaurants, sim_scores, input_index):
     return full_info
   except IndexError as error:
     print("error")
+    print(error)
     return web_scraping(restaurants, sim_scores, input_index)
 # def web_scraping(restaurants, sim_scores, input_index):
 #   """

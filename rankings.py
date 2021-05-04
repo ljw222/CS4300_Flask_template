@@ -49,7 +49,7 @@ review_splitter = [ids[0] for ids in review_idx_for_restaurant.values()][1:]
 
 def get_ranked_restaurants(in_restaurant, sim_matrix, user_review):
   """
-  Returns a list of sorted restaurants 
+  Returns a list of sorted restaurants
   """
   # input restaurant will have 11 reviews
   # find every row that corresponds to a review for input restaurant
@@ -71,7 +71,7 @@ def get_ranked_restaurants(in_restaurant, sim_matrix, user_review):
 
 # def main():
 #   """
-#   Prints the top 3 resulting restuarants for the parameters top_restaurants is 
+#   Prints the top 3 resulting restuarants for the parameters top_restaurants is
 #   set to.
 #   """
 #   #get the restaurant name
@@ -136,7 +136,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   recs = []
 
   if not user_review:
-    # get cossim list of sorted ranked restaurants (highest similarity to least 
+    # get cossim list of sorted ranked restaurants (highest similarity to least
     # similarity)
     ranked = get_ranked_restaurants(restaurant, cos_sim_matrix, False)
   else:
@@ -170,7 +170,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
   weighted_name_ranks = []
 
   # determine whether there are user or restuarant ambiance preferences and then
-  # creates a weighted jaccard and cosine similarity list (sorted from highest 
+  # creates a weighted jaccard and cosine similarity list (sorted from highest
   # similarity to lowest)
   if len(user_and_rest_ambiances) == 0:
     ambiance_preference = False
@@ -229,7 +229,7 @@ def get_reviews(restaurant):
   """
   Return list of reviews for a given restaurant name.
   Params: {
-    restaurant: string 
+    restaurant: string
   }
   Returns: string list
   """
@@ -239,71 +239,120 @@ def get_reviews(restaurant):
   return reviews
 
 def web_scraping(restaurants, sim_scores, input_index):
-  """
-  Returns a list of attributes for all the restaurants.
-  Params: {
-    restaurants: string list
-    max_price: float list
-    input_index: int list
-  }
-  Returns: list
-  """
-  full_info = dict()
-  requests_session = requests.Session()
-  for i in range(len(restaurants)):
-    r = restaurants[i]
-    sim_score = round(sim_scores[i] * 100, 2)
-    info = dict()
-    bus_id = small_data[r]['id']
-    page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
-    print("request made")
-    soup = BeautifulSoup(page.content, 'lxml')
-    # search for photo
-    try:
+  try:
+    full_info = dict()
+    requests_session = requests.Session()
+    for i in range(len(restaurants)):
+      r = restaurants[i]
+      sim_score = round(sim_scores[i] * 100, 2)
+      info = dict()
+      bus_id = small_data[r]['id']
+      page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
+      print("request made")
+      soup = BeautifulSoup(page.content, 'lxml')
       photos = soup.findAll('img', {"class": "photo-header-media-image__373c0__2Qf5H"})
-    except:
-      photos = []
-    image_srcs = []
-    for i, p in enumerate(photos):
-      src = p.attrs['src']
-      image_srcs.append(src)
-    info['photos'] = image_srcs
-    # search for address
-    try:
+      image_srcs = []
+      for i, p in enumerate(photos):
+        src = p.attrs['src']
+        image_srcs.append(src)
+      info['photos'] = image_srcs
+      # search the title of the webpage for address
       possible_addresses = soup.findAll('title', {"data-rh": "true"})
-    except:
-      possible_addresses = []
-    if len(possible_addresses) == 0:
-      info['address'] = "No address found"
-    else:
-      address = "No address found"
-      for p in possible_addresses:
-        if p.get_text() != "":
-          address = p.get_text()
-          for piece in address.split('- '):
-            if "Boston" in piece:
-              address = piece
-      info['address'] = address
-    # search for star rating
-    try:
+      if len(possible_addresses) == 0:
+        info['address'] = "No address found"
+      else:
+        address = "No address found"
+        for p in possible_addresses:
+          if p.get_text() != "":
+            address = p.get_text()
+            for piece in address.split('- '):
+              if "Boston" in piece:
+                address = piece
+        info['address'] = address
       rating_text = soup.findAll('div', {"class": re.compile("i-stars--large")})[0].attrs['aria-label']
       number = round(float(rating_text.split(' ')[0]))
       info['star rating'] = number
-    except:
-      info['star rating'] = 0
-
-    # get rid of word 'Restaurants' in categories list and find categories
-    try:
+      # get rid of word 'Restaurants' in categories list
       categories_string = small_data[r]['categories']
       categories_list = categories_string.split(', ')
       categories_list = [word for word in categories_list if word not in ['Restaurants']]
       info['categories'] = ', '.join(map(str, categories_list))
-    except:
-      info['categories'] = ""
 
-    full_info[r] = info
-    info['reviews'] = get_reviews(r)
-    info['id'] = bus_id
-    info['sim_score'] = sim_score
-    info['price'] = int(small_data[r]['price'])
-  return full_info
+      full_info[r] = info
+      info['reviews'] = get_reviews(r)
+      info['id'] = bus_id
+      info['sim_score'] = sim_score
+      info['price'] = int(small_data[r]['price'])
+    return full_info
+  except IndexError as error:
+    print("error")
+    return web_scraping(restaurants, sim_scores, input_index)
+# def web_scraping(restaurants, sim_scores, input_index):
+#   """
+#   Returns a list of attributes for all the restaurants.
+#   Params: {
+#     restaurants: string list
+#     max_price: float list
+#     input_index: int list
+#   }
+#   Returns: list
+#   """
+#   full_info = dict()
+#   requests_session = requests.Session()
+#   for i in range(len(restaurants)):
+#     r = restaurants[i]
+#     sim_score = round(sim_scores[i] * 100, 2)
+#     info = dict()
+#     bus_id = small_data[r]['id']
+#     page = requests_session.get(f"https://www.yelp.com/biz/{bus_id}")
+#     print("request made")
+#     soup = BeautifulSoup(page.content, 'lxml')
+#     # search for photo
+#     try:
+#       photos = soup.findAll('img', {"class": "photo-header-media-image__373c0__2Qf5H"})
+#     except:
+#       photos = []
+#     image_srcs = []
+#     for i, p in enumerate(photos):
+#       src = p.attrs['src']
+#       image_srcs.append(src)
+#     info['photos'] = image_srcs
+#     # search for address
+#     try:
+#       possible_addresses = soup.findAll('title', {"data-rh": "true"})
+#     except:
+#       possible_addresses = []
+#     if len(possible_addresses) == 0:
+#       info['address'] = "No address found"
+#     else:
+#       address = "No address found"
+#       for p in possible_addresses:
+#         if p.get_text() != "":
+#           address = p.get_text()
+#           for piece in address.split('- '):
+#             if "Boston" in piece:
+#               address = piece
+#       info['address'] = address
+#     # search for star rating
+#     try:
+#       rating_text = soup.findAll('div', {"class": re.compile("i-stars--large")})[0].attrs['aria-label']
+#       number = round(float(rating_text.split(' ')[0]))
+#       info['star rating'] = number
+#     except:
+#       info['star rating'] = 0
+
+#     # get rid of word 'Restaurants' in categories list and find categories
+#     try:
+#       categories_string = small_data[r]['categories']
+#       categories_list = categories_string.split(', ')
+#       categories_list = [word for word in categories_list if word not in ['Restaurants']]
+#       info['categories'] = ', '.join(map(str, categories_list))
+#     except:
+#       info['categories'] = ""
+
+#     full_info[r] = info
+#     info['reviews'] = get_reviews(r)
+#     info['id'] = bus_id
+#     info['sim_score'] = sim_score
+#     info['price'] = int(small_data[r]['price'])
+#   return full_info

@@ -51,13 +51,13 @@ def train():
   names = vec.get_feature_names()
   # commented out code below was for when we did cross validation
 
-  # param_grid = {'C': [1, 10, 100], 
+  # param_grid = {'C': [1, 10, 100],
   #             'gamma': [1, 0.1, 0.01],
-  #             'kernel': ['rbf', 'linear']} 
+  #             'kernel': ['rbf', 'linear']}
   # param_grid = {'C': [10, 1, 0.5, 0.25, 0.1]}
 
   models = dict()
-    
+
   # grid = GridSearchCV(LogisticRegression(), param_grid, refit = True, verbose = 0, scoring="f1_weighted")
   for col in ambiance_labels:
     X = X_features

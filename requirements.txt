@@ -61,4 +61,3 @@ WTForms==2.2.1
 
 pandas
 imblearn
-nltk.download('stopwords')

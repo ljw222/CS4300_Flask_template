@@ -209,7 +209,7 @@ def get_top(restaurant, max_price, cuisine, ambiance, n, review_weight, ambiance
       cuisine_match = False
 
       if price_preference: # if there is a price preference
-        low = (max_price == "low") and (price == 1 or price ==2)
+        low = (max_price == "low") and (price == 1)
         medium = (max_price == "medium") and (price == 2 or price == 3)
         high = (max_price == "high") and (price == 3 or price == 4 or price == 5)
         if low or medium or high:
@@ -317,6 +317,7 @@ def web_scraping(restaurants, sim_scores, input_index):
     try:
       photos = soup.findAll('img', {"class": "photo-header-media-image__373c0__2Qf5H"})
     except IndexError:
+      print("IndexError 320")
       photos = []
     image_srcs = []
     for i, p in enumerate(photos):
@@ -327,6 +328,7 @@ def web_scraping(restaurants, sim_scores, input_index):
     try:
       possible_addresses = soup.findAll('title', {"data-rh": "true"})
     except IndexError:
+      print("IndexError 331")
       possible_addresses = []
     if len(possible_addresses) == 0:
       info['address'] = "No address found"
@@ -345,6 +347,7 @@ def web_scraping(restaurants, sim_scores, input_index):
       number = round(float(rating_text.split(' ')[0]))
       info['star rating'] = number
     except IndexError:
+      print("IndexError 350")
       info['star rating'] = 0
 
     # get rid of word 'Restaurants' in categories list and find categories
@@ -354,6 +357,7 @@ def web_scraping(restaurants, sim_scores, input_index):
       categories_list = [word for word in categories_list if word not in ['Restaurants']]
       info['categories'] = ', '.join(map(str, categories_list))
     except:
+      print("IndexError 360")
       info['categories'] = ""
 
     full_info[r] = info
